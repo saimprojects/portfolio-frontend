@@ -1,16 +1,18 @@
 import axios from "axios";
 
-// ✅ Base config
+// ✅ Dynamic baseURL from env
+const BASE_URL = import.meta.env.VITE_BACKEND_URL + "/api/";
+
+// ✅ Axios base config
 export const base = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// ✅ API object with all endpoints
+// ✅ API object
 const API = {
-  // Reusable GET with optional query params
   getProjects: (params = "") => base.get(`projects/${params}`),
   getProject: (slug) => base.get(`projects/${slug}/`),
   getBlogs: () => base.get("blogs/").then(res => res.data),
