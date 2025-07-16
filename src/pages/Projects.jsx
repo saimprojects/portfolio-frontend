@@ -52,7 +52,7 @@ const Projects = () => {
               >
                 {/* Image */}
                 <img
-                  src={project.image.url}
+                  src={project.image}
                   alt={project.title}
                   className="h-48 w-full object-cover"
                 />
