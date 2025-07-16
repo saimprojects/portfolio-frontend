@@ -32,9 +32,13 @@ const Projects = () => {
         </h2>
 
         {loading ? (
-          <p className="text-center text-gray-500 dark:text-gray-400">Loading projects...</p>
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            Loading projects...
+          </p>
         ) : projects.length === 0 ? (
-          <p className="text-center text-gray-500 dark:text-gray-400">No projects found.</p>
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            No projects found.
+          </p>
         ) : (
           <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3">
             {projects.map((project, index) => (
@@ -48,7 +52,7 @@ const Projects = () => {
               >
                 {/* Image */}
                 <img
-                  src={project.image}
+                  src={project.image.url}
                   alt={project.title}
                   className="h-48 w-full object-cover"
                 />
@@ -56,7 +60,10 @@ const Projects = () => {
                 {/* Content */}
                 <div className="p-6 flex flex-col gap-4 flex-grow">
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    <Link to={`/project/${project.slug}`} className="hover:underline">
+                    <Link
+                      to={`/project/${project.slug}`}
+                      className="hover:underline"
+                    >
                       {project.title}
                     </Link>
                   </h3>
