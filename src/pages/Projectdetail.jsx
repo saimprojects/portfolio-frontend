@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import toast from "react-hot-toast";
 import Tilt from "react-parallax-tilt";
+import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing HTML
 
 const ProjectDetail = () => {
   const { slug } = useParams();
@@ -16,7 +17,9 @@ const ProjectDetail = () => {
     const fetchData = async () => {
       try {
         const projectRes = await API.getProject(slug);
+        console.log("Project Detail Response:", projectRes);
         if (projectRes?.data) setProject(projectRes.data);
+
         const suggestedRes = await API.getProjects("?limit=3&exclude=" + slug);
         if (suggestedRes?.data) setSuggestedProjects(suggestedRes.data);
       } catch (err) {
@@ -79,9 +82,10 @@ const ProjectDetail = () => {
             <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-amber-400 mb-4">
               {project.title || "Untitled Project"}
             </h2>
-            <p className="text-gray-700 dark:text-gray-200 text-base sm:text-lg leading-relaxed mb-6">
-              {project.description || "No description available."}
-            </p>
+            <div
+              className="prose dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.description || "<p>No description available.</p>") }}
+            />
             <div className="flex flex-wrap items-center gap-4">
               {project.github_link && (
                 <a
@@ -143,9 +147,10 @@ const ProjectDetail = () => {
                   <h4 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-2">
                     {sProject.title || "Untitled Project"}
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {sProject.description || "No description available."}
-                  </p>
+                  <div
+                    className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(sProject.description || "<p>No description available.</p>") }}
+                  />
                   <div className="flex items-center gap-3 mt-4">
                     {sProject.github_link && (
                       <a
