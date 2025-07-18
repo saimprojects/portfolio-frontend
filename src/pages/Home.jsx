@@ -146,7 +146,7 @@ const Home = () => {
                     transition={{ duration: 0.5, delay: index * 0.5 }}
                   >
                     <Link
-                      to={`/project/${project.id}`}
+                      to={`/project/${project.slug}`}
                       className="inline-flex items-center mt-4 text-sm text-teal-500 dark:text-teal-400 font-semibold hover:underline"
                     >
                       View Details <FaArrowRight className="ml-2" />

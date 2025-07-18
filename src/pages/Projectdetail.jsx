@@ -16,9 +16,9 @@ const ProjectDetail = () => {
     const fetchData = async () => {
       try {
         const projectRes = await API.getProject(slug);
-        setProject(projectRes.data);
+        if (projectRes?.data) setProject(projectRes.data);
         const suggestedRes = await API.getProjects("?limit=3&exclude=" + slug);
-        setSuggestedProjects(suggestedRes.data);
+        if (suggestedRes?.data) setSuggestedProjects(suggestedRes.data);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load project details.");
@@ -68,19 +68,19 @@ const ProjectDetail = () => {
         >
           <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px]">
             <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-contain sm:object-cover"
-              onError={(e) => (e.target.src = "/fallback-image.jpg")} // Fallback image
+              src={project.image || "/fallback-image.jpg"}
+              alt={project.title || "Project Image"}
+              className="w-full h-full object-cover"
+              onError={(e) => (e.target.src = "/fallback-image.jpg")}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           </div>
           <div className="p-6 sm:p-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-amber-400 mb-4">
-              {project.title}
+              {project.title || "Untitled Project"}
             </h2>
             <p className="text-gray-700 dark:text-gray-200 text-base sm:text-lg leading-relaxed mb-6">
-              {project.description}
+              {project.description || "No description available."}
             </p>
             <div className="flex flex-wrap items-center gap-4">
               {project.github_link && (
@@ -133,18 +133,18 @@ const ProjectDetail = () => {
               >
                 <div className="relative w-full h-48 sm:h-56">
                   <img
-                    src={sProject.image}
-                    alt={sProject.title}
-                    className="w-full h-full object-contain sm:object-cover"
-                    onError={(e) => (e.target.src = "/fallback-image.jpg")} // Fallback image
+                    src={sProject.image || "/fallback-image.jpg"}
+                    alt={sProject.title || "Project Image"}
+                    className="w-full h-full object-cover"
+                    onError={(e) => (e.target.src = "/fallback-image.jpg")}
                   />
                 </div>
                 <div className="p-4 sm:p-5">
                   <h4 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-2">
-                    {sProject.title}
+                    {sProject.title || "Untitled Project"}
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3">
-                    {sProject.description}
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {sProject.description || "No description available."}
                   </p>
                   <div className="flex items-center gap-3 mt-4">
                     {sProject.github_link && (
