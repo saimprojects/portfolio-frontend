@@ -31,62 +31,66 @@ const ProjectDetail = () => {
 
   if (loading) {
     return (
-      <section className="min-h-screen bg-gray-50 dark:bg-gray-950 py-20 px-4 sm:px-6 lg:px-12">
-        <p className="text-center text-gray-400 dark:text-gray-500 animate-pulse">Loading project...</p>
+      <section className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center py-20 px-4">
+        <p className="text-xl text-gray-500 dark:text-gray-400 animate-pulse">Loading project...</p>
       </section>
     );
   }
 
   if (!project) {
     return (
-      <section className="min-h-screen bg-gray-50 dark:bg-gray-950 py-20 px-4 sm:px-6 lg:px-12">
-        <p className="text-center text-gray-400 dark:text-gray-500">Project not found.</p>
+      <section className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center py-20 px-4">
+        <p className="text-xl text-gray-500 dark:text-gray-400">Project not found.</p>
       </section>
     );
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-gray-900 via-teal-900/20 to-gray-900 dark:from-gray-950 dark:via-teal-950/20 dark:to-gray-950 py-20 px-4 sm:px-6 lg:px-12 relative overflow-hidden">
+    <section className="min-h-screen bg-gradient-to-b from-gray-100 to-teal-50 dark:from-gray-900 dark:to-teal-950 py-16 px-4 sm:px-6 lg:px-8">
       <motion.div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(45,212,191,0.1)_0%,_rgba(0,0,0,0)_70%)] opacity-50"
-        animate={{ opacity: [0.5, 0.7, 0.5] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(45,212,191,0.15)_0%,_rgba(0,0,0,0)_70%)] opacity-40"
+        animate={{ opacity: [0.4, 0.6, 0.4] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-6xl mx-auto relative z-10"
+        transition={{ duration: 0.6 }}
+        className="max-w-7xl mx-auto relative z-10"
       >
         {/* Main Project Detail */}
         <motion.div
-          className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-teal-200/20 dark:border-teal-900/20 rounded-3xl overflow-hidden shadow-lg mb-12"
-          initial={{ scale: 0.95 }}
+          className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden mb-12 border border-teal-200/30 dark:border-teal-800/30"
+          initial={{ scale: 0.98 }}
           whileInView={{ scale: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
           viewport={{ once: true }}
         >
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-64 object-cover"
-          />
-          <div className="p-6">
-            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-amber-500 mb-4">
+          <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px]">
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-contain sm:object-cover"
+              onError={(e) => (e.target.src = "/fallback-image.jpg")} // Fallback image
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          </div>
+          <div className="p-6 sm:p-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-amber-400 mb-4">
               {project.title}
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-6">
+            <p className="text-gray-700 dark:text-gray-200 text-base sm:text-lg leading-relaxed mb-6">
               {project.description}
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {project.github_link && (
                 <a
                   href={project.github_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-white bg-teal-600 hover:bg-teal-700 rounded-full shadow-md transition-all duration-200 hover:shadow-lg"
+                  className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 rounded-full shadow-md transition-all duration-300 hover:shadow-lg"
                 >
-                  <Github className="w-4 h-4" /> GitHub
+                  <Github className="w-5 h-5" /> GitHub
                 </a>
               )}
               {project.live_link && (
@@ -94,9 +98,9 @@ const ProjectDetail = () => {
                   href={project.live_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-white bg-amber-600 hover:bg-amber-700 rounded-full shadow-md transition-all duration-200 hover:shadow-lg"
+                  className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-full shadow-md transition-all duration-300 hover:shadow-lg"
                 >
-                  <ExternalLink className="w-4 h-4" /> Live
+                  <ExternalLink className="w-5 h-5" /> Live Demo
                 </a>
               )}
             </div>
@@ -104,42 +108,45 @@ const ProjectDetail = () => {
         </motion.div>
 
         {/* Suggested Projects */}
-        <h3 className="text-2xl font-semibold text-gray-100 dark:text-gray-200 mb-6">
-          Suggested Projects
+        <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 dark:text-gray-100 mb-8">
+          Explore More Projects
         </h3>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {suggestedProjects.map((sProject, sIndex) => (
             <Tilt
               key={sProject.id}
-              tiltMaxAngleX={10}
-              tiltMaxAngleY={10}
-              perspective={1000}
-              scale={1.02}
-              transitionSpeed={1500}
+              tiltMaxAngleX={8}
+              tiltMaxAngleY={8}
+              perspective={1200}
+              scale={1.03}
+              transitionSpeed={1000}
               glareEnable={true}
-              glareMaxOpacity={0.2}
+              glareMaxOpacity={0.15}
               className="w-full"
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: sIndex * 0.1 }}
+                transition={{ duration: 0.5, delay: sIndex * 0.15 }}
                 viewport={{ once: true }}
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-teal-200/20 dark:border-teal-900/20 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-teal-200/20 dark:border-teal-800/20 overflow-hidden"
               >
-                <img
-                  src={sProject.image}
-                  alt={sProject.title}
-                  className="w-full h-40 object-cover"
-                />
-                <div className="p-4">
-                  <h4 className="text-lg font-medium text-gray-800 dark:text-white">
+                <div className="relative w-full h-48 sm:h-56">
+                  <img
+                    src={sProject.image}
+                    alt={sProject.title}
+                    className="w-full h-full object-contain sm:object-cover"
+                    onError={(e) => (e.target.src = "/fallback-image.jpg")} // Fallback image
+                  />
+                </div>
+                <div className="p-4 sm:p-5">
+                  <h4 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-2">
                     {sProject.title}
                   </h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3">
                     {sProject.description}
                   </p>
-                  <div className="flex items-center gap-2 mt-3">
+                  <div className="flex items-center gap-3 mt-4">
                     {sProject.github_link && (
                       <a
                         href={sProject.github_link}
@@ -147,7 +154,7 @@ const ProjectDetail = () => {
                         rel="noopener noreferrer"
                         className="text-teal-500 hover:text-teal-600 transition"
                       >
-                        <Github className="w-4 h-4" />
+                        <Github className="w-5 h-5" />
                       </a>
                     )}
                     {sProject.live_link && (
@@ -157,7 +164,7 @@ const ProjectDetail = () => {
                         rel="noopener noreferrer"
                         className="text-amber-500 hover:text-amber-600 transition"
                       >
-                        <ExternalLink className="w-4 h-4" />
+                        <ExternalLink className="w-5 h-5" />
                       </a>
                     )}
                   </div>
