@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import toast from "react-hot-toast";
 import Tilt from "react-parallax-tilt";
-import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing HTML
+import DOMPurify from "dompurify";
 
 const ProjectDetail = () => {
   const { slug } = useParams();
@@ -17,10 +17,9 @@ const ProjectDetail = () => {
     const fetchData = async () => {
       try {
         const projectRes = await API.getProject(slug);
-        console.log("Project Detail Response:", projectRes);
         if (projectRes?.data) setProject(projectRes.data);
 
-        const suggestedRes = await API.getProjects("?limit=3&exclude=" + slug);
+        const suggestedRes = await API.getProjects(`?limit=3&exclude=${slug}`);
         if (suggestedRes?.data) setSuggestedProjects(suggestedRes.data);
       } catch (err) {
         console.error(err);
@@ -35,7 +34,9 @@ const ProjectDetail = () => {
   if (loading) {
     return (
       <section className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center py-20 px-4">
-        <p className="text-xl text-gray-500 dark:text-gray-400 animate-pulse">Loading project...</p>
+        <p className="text-xl text-gray-500 dark:text-gray-400 animate-pulse">
+          Loading project...
+        </p>
       </section>
     );
   }
@@ -43,7 +44,9 @@ const ProjectDetail = () => {
   if (!project) {
     return (
       <section className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center py-20 px-4">
-        <p className="text-xl text-gray-500 dark:text-gray-400">Project not found.</p>
+        <p className="text-xl text-gray-500 dark:text-gray-400">
+          Project not found.
+        </p>
       </section>
     );
   }
@@ -84,9 +87,13 @@ const ProjectDetail = () => {
             </h2>
             <div
               className="prose dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.description || "<p>No description available.</p>") }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  project.description || "<p>No description available.</p>"
+                ),
+              }}
             />
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4 mt-6">
               {project.github_link && (
                 <a
                   href={project.github_link}
@@ -148,8 +155,18 @@ const ProjectDetail = () => {
                     {sProject.title || "Untitled Project"}
                   </h4>
                   <div
-                    className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(sProject.description || "<p>No description available.</p>") }}
+                    className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed overflow-hidden"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(
+                        sProject.description ||
+                          "<p>No description available.</p>"
+                      ),
+                    }}
                   />
                   <div className="flex items-center gap-3 mt-4">
                     {sProject.github_link && (
