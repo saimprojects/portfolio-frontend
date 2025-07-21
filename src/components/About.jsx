@@ -34,7 +34,7 @@ const About = () => {
             transition={{ duration: 3, repeat: Infinity }}
           />
           <img
-            src="https://scontent.flhe3-2.fna.fbcdn.net/v/t39.30808-1/496164084_122151183386475634_2916404138364015201_n.jpg?stp=cp6_dst-jpg_s200x200_tt6&_nc_cat=106&ccb=1-7&_nc_sid=1d2534&_nc_ohc=SExgXklprbAQ7kNvwHaJEq7&_nc_oc=AdmGZCvCgUtzmGAarZ9OFWsV1mTatwapUhwOmnEpy_G9wwMpMaHa5O0ptJPbLkU1fO8&_nc_zt=24&_nc_ht=scontent.flhe3-2.fna&_nc_gid=govumwaXTTFexqia9NU7pA&oh=00_AfT1fwk0M0F5HsOBxS6gjExNYNGLkKC9QocEDuI-3aGAxQ&oe=687AC6D3"
+            src="https://res.cloudinary.com/dxommxt6d/image/upload/v1753074039/unnamed_ompsk6.jpg"
             alt="Muhammad Saim"
             className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full shadow-xl border-4 border-white dark:border-gray-800 relative z-10"
           />
