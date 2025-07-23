@@ -49,6 +49,15 @@ const Footer = () => {
         >
           <FaInstagram className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition" size={24} />
         </motion.a>
+        <motion.a
+          href="https://www.meetsaim.online/sitemap.xml"
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ scale: 1.2 }}
+          transition={{ duration: 0.3 }}
+        >
+          <span className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition">Sitemap</span>
+        </motion.a>
       </div>
       <div className="flex justify-center space-x-4">
         <Link
