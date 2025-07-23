@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <!-- Home Page -->
   <url>
     <loc>https://www.meetsaim.online/</loc>
@@ -31,4 +30,27 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Privacy Policy Page -->
+  <url>
+    <loc>https://www.meetsaim.online/privacy-policy</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Return & Refund Policy Page -->
+  <url>
+    <loc>https://www.meetsaim.online/return-refund-policy</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Shipping Policy Page -->
+  <url>
+    <loc>https://www.meetsaim.online/shipping-policy</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Terms and Conditions Page -->
+  <url>
+    <loc>https://www.meetsaim.online/terms-and-conditions</loc>
+    <priority>0.6</priority>
+  </url>
 </urlset>
