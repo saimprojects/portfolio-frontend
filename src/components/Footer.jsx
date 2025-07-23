@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -20,7 +21,7 @@ const Footer = () => {
         Built with <span className="text-teal-500 font-semibold">React</span> &{" "}
         <span className="text-teal-500 font-semibold">Django</span>
       </p>
-      <div className="flex justify-center space-x-6">
+      <div className="flex justify-center space-x-6 mb-4">
         <motion.a
           href="https://github.com/saimprojects"
           target="_blank"
@@ -48,6 +49,32 @@ const Footer = () => {
         >
           <FaInstagram className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition" size={24} />
         </motion.a>
+      </div>
+      <div className="flex justify-center space-x-4">
+        <Link
+          to="/privacy-policy"
+          className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition"
+        >
+          Privacy Policy
+        </Link>
+        <Link
+          to="/return-refund-policy"
+          className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition"
+        >
+          Return & Refund Policy
+        </Link>
+        <Link
+          to="/shipping-policy"
+          className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition"
+        >
+          Shipping Policy
+        </Link>
+        <Link
+          to="/terms-and-conditions"
+          className="text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition"
+        >
+          Terms & Conditions
+        </Link>
       </div>
     </motion.footer>
   );

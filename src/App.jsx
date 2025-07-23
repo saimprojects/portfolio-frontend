@@ -6,8 +6,12 @@ import Contact from "./pages/Contact";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProjectDetail from "./pages/Projectdetail";
-import Services from "./pages/Services"; // Added Services import
+import Services from "./pages/Services";
 import BlogDetail from "./pages/Blogdetails";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ReturnRefundPolicy from "./pages/RefundPolicy";
+import ShippingPolicy from "./pages/ShippingPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 function App() {
   return (
@@ -22,7 +26,11 @@ function App() {
             <Route path="/blog/:slug" element={<BlogDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/project/:slug" element={<ProjectDetail />} />
-            <Route path="/services" element={<Services />} /> {/* Added Services route */}
+            <Route path="/services" element={<Services />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/return-refund-policy" element={<ReturnRefundPolicy />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           </Routes>
         </div>
         <Footer />
