@@ -1,5 +1,5 @@
 import { useState, useContext, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import emailjs from "@emailjs/browser";
 import API from "../api";
@@ -67,25 +67,27 @@ const Contact = () => {
     try {
       setLoading(true);
       
-      // Using EmailJS
+      // Using EmailJS (Replace with your actual credentials)
       const templateParams = {
         from_name: name,
         from_email: email,
         subject: subject || "New Contact Form Submission",
         message: message,
-        to_name: "Your Name",
+        to_name: "Muhammad Saim",
         reply_to: email
       };
 
-      // Replace with your EmailJS service ID, template ID, and public key
+      // Uncomment and add your EmailJS credentials
+      /*
       await emailjs.send(
         'YOUR_SERVICE_ID',
         'YOUR_TEMPLATE_ID',
         templateParams,
         'YOUR_PUBLIC_KEY'
       );
+      */
 
-      // Also send to your API if needed
+      // Fallback: Send to your API
       await API.postContact(formData);
       
       toast.success("Message sent successfully!");
@@ -108,25 +110,25 @@ const Contact = () => {
     { 
       icon: <Github className="w-5 h-5" />, 
       label: "GitHub", 
-      url: "https://github.com/yourusername",
+      url: "https://github.com/saimprojects",
       color: "hover:bg-gray-900 hover:text-white"
     },
     { 
       icon: <Linkedin className="w-5 h-5" />, 
       label: "LinkedIn", 
-      url: "https://linkedin.com/in/yourusername",
+      url: "https://linkedin.com/in/muhammad-saim-0821b4319",
       color: "hover:bg-blue-700 hover:text-white"
     },
     { 
       icon: <Twitter className="w-5 h-5" />, 
       label: "Twitter", 
-      url: "https://twitter.com/yourusername",
+      url: "https://twitter.com/expertsaimdev",
       color: "hover:bg-sky-500 hover:text-white"
     },
     { 
       icon: <MailIcon className="w-5 h-5" />, 
       label: "Email", 
-      url: "mailto:you@example.com",
+      url: "mailto:contact@meetsaim.online",
       color: "hover:bg-red-600 hover:text-white"
     },
   ];
@@ -141,7 +143,7 @@ const Contact = () => {
     { 
       icon: <Mail className="w-6 h-6" />, 
       title: "Email", 
-      value: "hello@example.com",
+      value: "contact@meetsaim.online",
       desc: "I'll respond within 24 hours"
     },
     { 
