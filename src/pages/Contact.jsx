@@ -119,12 +119,12 @@ const Contact = () => {
       url: "https://linkedin.com/in/muhammad-saim-0821b4319",
       color: "hover:bg-blue-700 hover:text-white"
     },
-    { 
-      icon: <Facebook className="w-5 h-5" />, 
-      label: "Facebook", 
-      url: "https://www.facebook.com/muhammad.saim.650967/",
-      color: "hover:bg-sky-500 hover:text-white"
-    },
+    // { 
+    //   icon: <Facebook className="w-5 h-5" />, 
+    //   label: "Facebook", 
+    //   url: "https://www.facebook.com/muhammad.saim.650967/",
+    //   color: "hover:bg-sky-500 hover:text-white"
+    // },
     { 
       icon: <MailIcon className="w-5 h-5" />, 
       label: "Email", 
