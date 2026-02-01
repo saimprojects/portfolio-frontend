@@ -120,15 +120,15 @@ const Contact = () => {
       color: "hover:bg-blue-700 hover:text-white"
     },
     { 
-      icon: <Twitter className="w-5 h-5" />, 
-      label: "Twitter", 
-      url: "https://twitter.com/expertsaimdev",
+      icon: <Facebook className="w-5 h-5" />, 
+      label: "Facebook", 
+      url: "https://www.facebook.com/muhammad.saim.650967/",
       color: "hover:bg-sky-500 hover:text-white"
     },
     { 
       icon: <MailIcon className="w-5 h-5" />, 
       label: "Email", 
-      url: "mailto:contact@meetsaim.online",
+      url: "mailto:saimpkf@gmail.com",
       color: "hover:bg-red-600 hover:text-white"
     },
   ];
@@ -137,13 +137,13 @@ const Contact = () => {
     { 
       icon: <Phone className="w-6 h-6" />, 
       title: "Phone", 
-      value: "+92 123 456 7890",
+      value: "+92 313 147 1263",
       desc: "Mon-Fri from 9am to 6pm"
     },
     { 
       icon: <Mail className="w-6 h-6" />, 
       title: "Email", 
-      value: "contact@meetsaim.online",
+      value: "saimpkf@gmail.com",
       desc: "I'll respond within 24 hours"
     },
     { 

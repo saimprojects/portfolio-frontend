@@ -65,8 +65,8 @@ const Footer = () => {
   ];
 
   const contactInfo = [
-    { icon: <Mail className="w-4 h-4" />, text: "hello@example.com" },
-    { icon: <Phone className="w-4 h-4" />, text: "+92 123 456 7890" },
+    { icon: <Mail className="w-4 h-4" />, text: "saimpkf@gmail.com" },
+    { icon: <Phone className="w-4 h-4" />, text: "+92 313 147 1263" },
     { icon: <MapPin className="w-4 h-4" />, text: "Karachi, Pakistan" },
   ];
 
