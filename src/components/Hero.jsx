@@ -287,7 +287,7 @@ const Hero = () => {
                       <span className="text-amber-400">skills</span>:[
                       <span className="text-blue-400">"React"</span>,
                       <span className="text-blue-400">"Django"</span>,
-                      <span className="text-blue-400">"TypeScript"</span>
+                      <span className="text-blue-400">"JavaScript"</span>
                       ],
                     </div>
                     <div className="text-gray-400 ml-4">

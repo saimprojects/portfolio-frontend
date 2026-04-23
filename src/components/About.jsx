@@ -37,8 +37,8 @@ const About = () => {
   ];
 
   const expertise = [
-    { icon: <Code className="w-5 h-5" />, label: "Frontend", tech: "React, Next.js, TypeScript" },
-    { icon: <Server className="w-5 h-5" />, label: "Backend", tech: "Django, Node.js, PostgreSQL" },
+    { icon: <Code className="w-5 h-5" />, label: "Frontend", tech: "React, JavaScript" },
+    { icon: <Server className="w-5 h-5" />, label: "Backend", tech: "Django, Python, PostgreSQL" },
     { icon: <Palette className="w-5 h-5" />, label: "Design", tech: "Figma, Tailwind, Framer Motion" },
   ];
 

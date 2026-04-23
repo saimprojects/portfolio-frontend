@@ -83,11 +83,8 @@ const Skills = () => {
   const getFallbackSkills = () => [
     { id: 1, name: "React", proficiency: 90, category: "frontend" },
     { id: 2, name: "JavaScript", proficiency: 95, category: "frontend" },
-    { id: 3, name: "TypeScript", proficiency: 85, category: "frontend" },
     { id: 4, name: "Python", proficiency: 88, category: "backend" },
     { id: 5, name: "Django", proficiency: 92, category: "backend" },
-    { id: 6, name: "Node.js", proficiency: 87, category: "backend" },
-    { id: 7, name: "MongoDB", proficiency: 85, category: "database" },
     { id: 8, name: "PostgreSQL", proficiency: 83, category: "database" },
     { id: 9, name: "Tailwind CSS", proficiency: 94, category: "frontend" },
     { id: 10, name: "Docker", proficiency: 80, category: "tools" },
