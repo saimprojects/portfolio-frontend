@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 class ErrorBoundary extends React.Component {
   state = { hasError: false };
@@ -63,6 +64,21 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+// Helper function to strip HTML tags and get plain text
+const stripHtmlTags = (html) => {
+  if (!html) return "";
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  return temp.textContent || temp.innerText || "";
+};
+
+// Helper function to truncate text to a certain length
+const truncateText = (text, maxLength = 150) => {
+  if (!text) return "";
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + "...";
+};
+
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
@@ -96,8 +112,14 @@ const Blogs = () => {
             ? response
             : response.blogs || [response] || [];
           
-          // Add sample data if empty
-          const enhancedBlogs = blogData.length > 0 ? blogData : generateSampleBlogs();
+          // Process blog content - strip HTML for display
+          const processedBlogs = blogData.map(blog => ({
+            ...blog,
+            plainContent: stripHtmlTags(blog.content || blog.excerpt || ""),
+            safeContent: blog.content ? DOMPurify.sanitize(blog.content) : blog.excerpt || ""
+          }));
+          
+          const enhancedBlogs = processedBlogs.length > 0 ? processedBlogs : generateSampleBlogs();
           setBlogs(enhancedBlogs);
           setFilteredBlogs(enhancedBlogs);
           
@@ -141,7 +163,7 @@ const Blogs = () => {
     if (searchTerm) {
       result = result.filter(blog =>
         blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        blog.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        blog.plainContent?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
@@ -176,7 +198,8 @@ const Blogs = () => {
       {
         id: 1,
         title: "Perplexity AI Pro Review (2025): The Smartest AI Search Assistant Yet",
-        content: "If ChatGPT changed how we talk to AI, Perplexity AI is changing how we search. It's not just a chatbot or search engine — it's a complete research companion that provides cited answers from the web. In this comprehensive review, we explore its features, pricing, and whether it's worth the investment for professionals and researchers.",
+        content: "<p>If ChatGPT changed how we talk to AI, Perplexity AI is changing how we search. It's not just a chatbot or search engine — it's a complete research companion that provides cited answers from the web.</p>",
+        plainContent: "If ChatGPT changed how we talk to AI, Perplexity AI is changing how we search. It's not just a chatbot or search engine — it's a complete research companion that provides cited answers from the web.",
         slug: "perplexity-ai-pro-review-2025",
         published_date: "2025-01-15",
         author: "Sarah Chen",
@@ -190,7 +213,8 @@ const Blogs = () => {
       {
         id: 2,
         title: "Mastering React Hooks in 2024",
-        content: "Learn advanced patterns and best practices for React Hooks that will make your components more efficient and maintainable. From useState to custom hooks, this guide covers everything you need to know.",
+        content: "<p>Learn advanced patterns and best practices for React Hooks that will make your components more efficient and maintainable. From useState to custom hooks, this guide covers everything you need to know.</p>",
+        plainContent: "Learn advanced patterns and best practices for React Hooks that will make your components more efficient and maintainable. From useState to custom hooks, this guide covers everything you need to know.",
         slug: "mastering-react-hooks-2024",
         published_date: "2024-12-20",
         author: "John Doe",
@@ -204,7 +228,8 @@ const Blogs = () => {
       {
         id: 3,
         title: "The Future of Web Development",
-        content: "Exploring upcoming trends and technologies that will shape web development in the coming years. From WebAssembly to Edge Computing, discover what's next.",
+        content: "<p>Exploring upcoming trends and technologies that will shape web development in the coming years. From WebAssembly to Edge Computing, discover what's next.</p>",
+        plainContent: "Exploring upcoming trends and technologies that will shape web development in the coming years. From WebAssembly to Edge Computing, discover what's next.",
         slug: "future-web-development",
         published_date: "2024-12-10",
         author: "Jane Smith",
@@ -214,48 +239,6 @@ const Blogs = () => {
         views: 980,
         likes: 65,
         comments: 15
-      },
-      {
-        id: 4,
-        title: "Building Scalable APIs with Node.js",
-        content: "A comprehensive guide to building robust and scalable REST APIs using Node.js and Express. Learn best practices for authentication, validation, and error handling.",
-        slug: "scalable-apis-nodejs",
-        published_date: "2024-12-05",
-        author: "Alex Johnson",
-        read_time: "12 min read",
-        category: "tutorials",
-        tags: ["Node.js", "API", "Backend"],
-        views: 1560,
-        likes: 102,
-        comments: 31
-      },
-      {
-        id: 5,
-        title: "Modern CSS Techniques You Should Know",
-        content: "Advanced CSS features and techniques for modern web development. Container queries, subgrid, and new viewport units are changing how we style websites.",
-        slug: "modern-css-techniques",
-        published_date: "2024-11-28",
-        author: "Emily Rodriguez",
-        read_time: "10 min read",
-        category: "webdev",
-        tags: ["CSS", "Design", "Frontend"],
-        views: 2100,
-        likes: 178,
-        comments: 42
-      },
-      {
-        id: 6,
-        title: "Design Systems: From Concept to Implementation",
-        content: "How to build and maintain effective design systems that scale across products and teams. Learn about component libraries, documentation, and governance.",
-        slug: "design-systems-guide",
-        published_date: "2024-11-20",
-        author: "Michael Brown",
-        read_time: "11 min read",
-        category: "design",
-        tags: ["Design", "UI/UX", "Systems"],
-        views: 875,
-        likes: 64,
-        comments: 19
       }
     ];
   };
@@ -295,7 +278,7 @@ const Blogs = () => {
           {blog.title}
         </h3>
         <p className="text-white/90 mb-6 line-clamp-2">
-          {blog.content}
+          {truncateText(blog.plainContent || blog.content, 120)}
         </p>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 text-white/80 text-sm">
@@ -489,9 +472,9 @@ const Blogs = () => {
                       className="group relative cursor-pointer"
                       onClick={() => navigate(`/blog/${blog.slug}`)}
                     >
-                      {/* Blog Card - Warm colors without blue/purple */}
+                      {/* Blog Card */}
                       <div className="relative h-full rounded-2xl bg-white dark:bg-gray-900/80 backdrop-blur-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-xl transition-all duration-500">
-                        {/* Category Badge - Warm gradients */}
+                        {/* Category Badge */}
                         <div className="absolute top-4 left-4 z-10">
                           <span className="px-3 py-1 bg-gradient-to-r from-emerald-500/10 to-amber-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-semibold rounded-full capitalize">
                             {blog.category || "General"}
@@ -521,9 +504,9 @@ const Blogs = () => {
                             {blog.title}
                           </h3>
 
-                          {/* Excerpt - Fixed content display */}
+                          {/* Excerpt - Now showing clean text without HTML tags */}
                           <p className="text-gray-700 dark:text-gray-400 mb-6 line-clamp-3">
-                            {blog.content}
+                            {truncateText(blog.plainContent || blog.content, 150)}
                           </p>
 
                           {/* Tags */}
@@ -568,7 +551,7 @@ const Blogs = () => {
             </>
           )}
 
-          {/* Newsletter CTA - Warm colors */}
+          {/* Newsletter CTA */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
