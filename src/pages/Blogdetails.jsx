@@ -48,8 +48,8 @@ const BlogDetail = () => {
         if (mounted) {
           setBlog(response || generateSampleBlog());
           
-          // Fetch related blogs
-          const relatedRes = await API.getBlogs(`?limit=3&exclude=${slug}`);
+          // Fetch related blogs (limit to 4-5)
+          const relatedRes = await API.getBlogs(`?limit=5&exclude=${slug}`);
           setRelatedBlogs(relatedRes || generateSampleBlogs());
           
           // Simulate comments
@@ -137,6 +137,22 @@ const BlogDetail = () => {
       excerpt: "Advanced CSS features and techniques for modern web development.",
       published_date: "2024-01-01",
       read_time: "10 min read"
+    },
+    {
+      id: 5,
+      title: "State Management in React: A Complete Guide",
+      slug: "state-management-react",
+      excerpt: "Learn different state management approaches in React applications.",
+      published_date: "2023-12-28",
+      read_time: "15 min read"
+    },
+    {
+      id: 6,
+      title: "TypeScript Best Practices for Large Applications",
+      slug: "typescript-best-practices",
+      excerpt: "Essential TypeScript patterns and practices for scaling your applications.",
+      published_date: "2023-12-20",
+      read_time: "9 min read"
     }
   ];
 
@@ -146,24 +162,21 @@ const BlogDetail = () => {
       author: "Sarah Johnson",
       avatar: "SJ",
       date: "2 days ago",
-      content: "Great article! The examples were really helpful for understanding complex concepts.",
-      likes: 12
+      content: "Great article! The examples were really helpful for understanding complex concepts."
     },
     {
       id: 2,
       author: "Mike Chen",
       avatar: "MC",
       date: "3 days ago",
-      content: "Thanks for sharing these advanced patterns. The custom hooks section was particularly useful!",
-      likes: 8
+      content: "Thanks for sharing these advanced patterns. The custom hooks section was particularly useful!"
     },
     {
       id: 3,
       author: "Alex Rodriguez",
       avatar: "AR",
       date: "5 days ago",
-      content: "I've been using React for years but still learned something new from this post.",
-      likes: 15
+      content: "I've been using React for years but still learned something new from this post."
     }
   ];
 
@@ -207,8 +220,7 @@ const BlogDetail = () => {
         author: "You",
         avatar: "YO",
         date: "Just now",
-        content: comment,
-        likes: 0
+        content: comment
       };
       setComments([newComment, ...comments]);
       setComment("");
@@ -219,18 +231,13 @@ const BlogDetail = () => {
   const LoadingSkeleton = () => (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-black py-20 px-4 sm:px-6 lg:px-12">
       <div className="max-w-4xl mx-auto">
-        {/* Back Button Skeleton */}
         <div className="mb-8">
-          <div className="h-10 w-32 bg-gray-300 dark:bg-gray-800 rounded-xl animate-pulse" />
+          <div className="h-10 w-32 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />
         </div>
-
-        {/* Header Skeleton */}
         <div className="mb-8">
-          <div className="h-12 bg-gray-300 dark:bg-gray-800 rounded-xl w-3/4 mb-4 animate-pulse" />
+          <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded-xl w-3/4 mb-4 animate-pulse" />
           <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-xl w-1/2 animate-pulse" />
         </div>
-
-        {/* Content Skeleton */}
         <div className="space-y-4">
           {[...Array(6)].map((_, i) => (
             <div key={i}>
@@ -290,7 +297,7 @@ const BlogDetail = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => navigate("/blogs")}
-          className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 mb-8 transition-colors"
+          className="group inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to Blogs
@@ -314,12 +321,12 @@ const BlogDetail = () => {
             {blog.title}
           </h1>
           
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
+          <p className="text-xl text-gray-700 dark:text-gray-400 mb-8">
             {blog.excerpt}
           </p>
 
           {/* Meta Information */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 p-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-800/50">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 p-6 bg-white dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-gray-800/50">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-500 to-amber-500 flex items-center justify-center text-white font-bold">
                 {blog.author?.charAt(0) || "J"}
@@ -362,7 +369,7 @@ const BlogDetail = () => {
           transition={{ delay: 0.2 }}
           className="sticky top-4 z-20 mb-8"
         >
-          <div className="flex items-center justify-between p-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-800/50 shadow-lg">
+          <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-900/90 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-gray-800/50 shadow-lg">
             <div className="flex items-center gap-4">
               <button
                 onClick={handleLike}
@@ -443,9 +450,10 @@ const BlogDetail = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="prose prose-lg dark:prose-invert max-w-none mb-12"
+          className="prose prose-lg prose-gray dark:prose-invert max-w-none mb-12"
         >
           <div
+            className="text-gray-800 dark:text-gray-200"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(blog.content || "No content available")
             }}
@@ -464,7 +472,7 @@ const BlogDetail = () => {
               {blog.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center gap-1 px-4 py-2 bg-gradient-to-r from-teal-500/10 to-amber-500/10 text-teal-600 dark:text-teal-400 text-sm font-medium rounded-xl"
+                  className="inline-flex items-center gap-1 px-4 py-2 bg-gradient-to-r from-teal-500/10 to-amber-500/10 text-teal-700 dark:text-teal-400 text-sm font-medium rounded-xl"
                 >
                   <Tag className="w-3 h-3" />
                   {tag}
@@ -483,7 +491,7 @@ const BlogDetail = () => {
               exit={{ opacity: 0, height: 0 }}
               className="mb-12 overflow-hidden"
             >
-              <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 dark:border-gray-800/50">
+              <div className="bg-white dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200 dark:border-gray-800/50">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Comments ({comments.length})
                 </h3>
@@ -508,7 +516,7 @@ const BlogDetail = () => {
                 {/* Comments List */}
                 <div className="space-y-6">
                   {comments.map((comment) => (
-                    <div key={comment.id} className="flex gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl">
+                    <div key={comment.id} className="flex gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
                       <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
                         {comment.avatar}
                       </div>
@@ -521,13 +529,9 @@ const BlogDetail = () => {
                             {comment.date}
                           </span>
                         </div>
-                        <p className="text-gray-700 dark:text-gray-300 mb-2">
+                        <p className="text-gray-700 dark:text-gray-300">
                           {comment.content}
                         </p>
-                        <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                          <ThumbsUp className="w-4 h-4 inline mr-1" />
-                          {comment.likes}
-                        </button>
                       </div>
                     </div>
                   ))}
@@ -557,8 +561,8 @@ const BlogDetail = () => {
             </button>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {relatedBlogs.map((relatedBlog, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {relatedBlogs.slice(0, 5).map((relatedBlog, index) => (
               <motion.div
                 key={relatedBlog.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -567,62 +571,16 @@ const BlogDetail = () => {
                 className="group cursor-pointer"
                 onClick={() => navigate(`/blog/${relatedBlog.slug}`)}
               >
-                <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl p-5 border border-gray-200/50 dark:border-gray-800/50 shadow-lg hover:shadow-2xl transition-all duration-500">
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-3 group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors line-clamp-2">
+                <div className="bg-white dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl p-5 border border-gray-200 dark:border-gray-800/50 shadow-lg hover:shadow-2xl transition-all duration-500 h-full">
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors line-clamp-2">
                     {relatedBlog.title}
                   </h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                  <p className="text-gray-700 dark:text-gray-400 text-sm line-clamp-3">
                     {relatedBlog.excerpt}
                   </p>
-                  <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                    <span className="flex items-center gap-1">
-                      <CalendarDays className="w-3 h-3" />
-                      {new Date(relatedBlog.published_date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {relatedBlog.read_time}
-                    </span>
-                  </div>
                 </div>
               </motion.div>
             ))}
-          </div>
-        </motion.div>
-
-        {/* Newsletter CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-20"
-        >
-          <div className="relative rounded-3xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500 animate-gradient-x" />
-            <div className="relative bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm p-12">
-              <div className="text-center">
-                <h3 className="text-3xl font-bold text-white mb-6">
-                  Enjoyed this article?
-                </h3>
-                <p className="text-white/90 mb-8">
-                  Subscribe to get more insights, tutorials, and updates delivered to your inbox.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 px-6 py-3 bg-white/20 backdrop-blur-sm text-white placeholder-white/70 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50"
-                  />
-                  <button className="px-8 py-3 bg-white text-gray-900 font-semibold rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                    Subscribe
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>

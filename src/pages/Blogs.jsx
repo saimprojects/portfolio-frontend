@@ -39,7 +39,7 @@ class ErrorBoundary extends React.Component {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-md"
           >
-            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 flex items-center justify-center">
+            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-rose-500 to-orange-500 flex items-center justify-center">
               <BookOpen className="w-12 h-12 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
@@ -50,7 +50,7 @@ class ErrorBoundary extends React.Component {
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-amber-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300"
             >
               <Sparkles className="w-4 h-4" />
               Retry Loading
@@ -175,10 +175,24 @@ const Blogs = () => {
     return [
       {
         id: 1,
+        title: "Perplexity AI Pro Review (2025): The Smartest AI Search Assistant Yet",
+        content: "If ChatGPT changed how we talk to AI, Perplexity AI is changing how we search. It's not just a chatbot or search engine — it's a complete research companion that provides cited answers from the web. In this comprehensive review, we explore its features, pricing, and whether it's worth the investment for professionals and researchers.",
+        slug: "perplexity-ai-pro-review-2025",
+        published_date: "2025-01-15",
+        author: "Sarah Chen",
+        read_time: "9 min read",
+        category: "technology",
+        tags: ["AI", "Search", "Productivity", "Review"],
+        views: 3420,
+        likes: 245,
+        comments: 67
+      },
+      {
+        id: 2,
         title: "Mastering React Hooks in 2024",
-        content: "Learn advanced patterns and best practices for React Hooks that will make your components more efficient and maintainable.",
+        content: "Learn advanced patterns and best practices for React Hooks that will make your components more efficient and maintainable. From useState to custom hooks, this guide covers everything you need to know.",
         slug: "mastering-react-hooks-2024",
-        published_date: "2024-01-15",
+        published_date: "2024-12-20",
         author: "John Doe",
         read_time: "8 min read",
         category: "webdev",
@@ -188,11 +202,11 @@ const Blogs = () => {
         comments: 23
       },
       {
-        id: 2,
+        id: 3,
         title: "The Future of Web Development",
-        content: "Exploring upcoming trends and technologies that will shape web development in the coming years.",
+        content: "Exploring upcoming trends and technologies that will shape web development in the coming years. From WebAssembly to Edge Computing, discover what's next.",
         slug: "future-web-development",
-        published_date: "2024-01-10",
+        published_date: "2024-12-10",
         author: "Jane Smith",
         read_time: "6 min read",
         category: "technology",
@@ -202,11 +216,11 @@ const Blogs = () => {
         comments: 15
       },
       {
-        id: 3,
+        id: 4,
         title: "Building Scalable APIs with Node.js",
-        content: "A comprehensive guide to building robust and scalable REST APIs using Node.js and Express.",
+        content: "A comprehensive guide to building robust and scalable REST APIs using Node.js and Express. Learn best practices for authentication, validation, and error handling.",
         slug: "scalable-apis-nodejs",
-        published_date: "2024-01-05",
+        published_date: "2024-12-05",
         author: "Alex Johnson",
         read_time: "12 min read",
         category: "tutorials",
@@ -214,6 +228,34 @@ const Blogs = () => {
         views: 1560,
         likes: 102,
         comments: 31
+      },
+      {
+        id: 5,
+        title: "Modern CSS Techniques You Should Know",
+        content: "Advanced CSS features and techniques for modern web development. Container queries, subgrid, and new viewport units are changing how we style websites.",
+        slug: "modern-css-techniques",
+        published_date: "2024-11-28",
+        author: "Emily Rodriguez",
+        read_time: "10 min read",
+        category: "webdev",
+        tags: ["CSS", "Design", "Frontend"],
+        views: 2100,
+        likes: 178,
+        comments: 42
+      },
+      {
+        id: 6,
+        title: "Design Systems: From Concept to Implementation",
+        content: "How to build and maintain effective design systems that scale across products and teams. Learn about component libraries, documentation, and governance.",
+        slug: "design-systems-guide",
+        published_date: "2024-11-20",
+        author: "Michael Brown",
+        read_time: "11 min read",
+        category: "design",
+        tags: ["Design", "UI/UX", "Systems"],
+        views: 875,
+        likes: 64,
+        comments: 19
       }
     ];
   };
@@ -241,15 +283,15 @@ const Blogs = () => {
       className="relative rounded-3xl overflow-hidden group cursor-pointer"
       onClick={() => navigate(`/blog/${blog.slug}`)}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 via-purple-500/20 to-pink-500/20" />
-      <div className="relative bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm p-8">
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 via-amber-600/20 to-orange-600/20" />
+      <div className="relative bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-sm p-8">
         <div className="flex items-center gap-2 mb-4">
-          <span className="px-3 py-1 bg-gradient-to-r from-teal-500 to-amber-500 text-white text-xs font-semibold rounded-full">
+          <span className="px-3 py-1 bg-gradient-to-r from-emerald-600 to-amber-600 text-white text-xs font-semibold rounded-full">
             Featured
           </span>
-          <span className="text-sm text-white/80">{blog.category}</span>
+          <span className="text-sm text-white/80 capitalize">{blog.category}</span>
         </div>
-        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-teal-300 transition-colors">
+        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-300 transition-colors line-clamp-2">
           {blog.title}
         </h3>
         <p className="text-white/90 mb-6 line-clamp-2">
@@ -275,10 +317,10 @@ const Blogs = () => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-black py-12 md:py-20 px-4 sm:px-6 lg:px-12 relative overflow-hidden">
-        {/* Background Elements */}
+        {/* Background Elements - Warm earthy tones */}
         <div className="fixed inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-r from-teal-500/5 to-purple-500/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-r from-amber-500/5 to-pink-500/5 rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-r from-emerald-500/5 to-amber-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-r from-orange-500/5 to-rose-500/5 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -289,21 +331,21 @@ const Blogs = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500/10 to-amber-500/10 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500/10 to-amber-500/10 rounded-full mb-6">
+              <Sparkles className="w-4 h-4 text-amber-600" />
+              <span className="text-sm font-semibold text-amber-700 dark:text-amber-400">
                 Thoughts & Insights
               </span>
             </div>
             
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 via-amber-600 to-orange-600 bg-clip-text text-transparent">
                 Blog
               </span>{" "}
               & Articles
             </h1>
             
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-700 dark:text-gray-400 max-w-3xl mx-auto">
               Sharing knowledge, insights, and experiences about web development, 
               design, technology, and career growth.
             </p>
@@ -322,7 +364,7 @@ const Blogs = () => {
               </h2>
               <Link
                 to="/blog/category/featured"
-                className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
               >
                 View All Featured
                 <ChevronRight className="w-4 h-4" />
@@ -352,7 +394,7 @@ const Blogs = () => {
                   placeholder="Search articles, topics, or keywords..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent text-gray-900 dark:text-white"
+                  className="w-full pl-12 pr-4 py-3 bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent text-gray-900 dark:text-white"
                 />
               </div>
 
@@ -362,7 +404,7 @@ const Blogs = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 text-gray-900 dark:text-white"
+                  className="bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 text-gray-900 dark:text-white"
                 >
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -378,7 +420,7 @@ const Blogs = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 text-gray-900 dark:text-white"
+                  className="bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 text-gray-900 dark:text-white"
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
@@ -413,7 +455,7 @@ const Blogs = () => {
                   setSearchTerm("");
                   setSelectedCategory("all");
                 }}
-                className="px-6 py-3 bg-gradient-to-r from-teal-500 to-amber-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300"
+                className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300"
               >
                 Clear Filters
               </button>
@@ -421,8 +463,8 @@ const Blogs = () => {
           ) : (
             <>
               <div className="mb-8 flex items-center justify-between">
-                <p className="text-gray-600 dark:text-gray-400">
-                  Showing <span className="font-bold text-teal-600 dark:text-teal-400">
+                <p className="text-gray-700 dark:text-gray-400">
+                  Showing <span className="font-bold text-emerald-600 dark:text-emerald-400">
                     {filteredBlogs.length}
                   </span> articles
                 </p>
@@ -447,11 +489,11 @@ const Blogs = () => {
                       className="group relative cursor-pointer"
                       onClick={() => navigate(`/blog/${blog.slug}`)}
                     >
-                      {/* Blog Card */}
-                      <div className="relative h-full rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl overflow-hidden border border-gray-200/50 dark:border-gray-800/50 shadow-lg hover:shadow-2xl transition-all duration-500">
-                        {/* Category Badge */}
+                      {/* Blog Card - Warm colors without blue/purple */}
+                      <div className="relative h-full rounded-2xl bg-white dark:bg-gray-900/80 backdrop-blur-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-xl transition-all duration-500">
+                        {/* Category Badge - Warm gradients */}
                         <div className="absolute top-4 left-4 z-10">
-                          <span className="px-3 py-1 bg-gradient-to-r from-teal-500/10 to-amber-500/10 text-teal-600 dark:text-teal-400 text-xs font-semibold rounded-full">
+                          <span className="px-3 py-1 bg-gradient-to-r from-emerald-500/10 to-amber-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-semibold rounded-full capitalize">
                             {blog.category || "General"}
                           </span>
                         </div>
@@ -475,12 +517,12 @@ const Blogs = () => {
                           </div>
 
                           {/* Title */}
-                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors line-clamp-2">
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
                             {blog.title}
                           </h3>
 
-                          {/* Excerpt */}
-                          <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-3">
+                          {/* Excerpt - Fixed content display */}
+                          <p className="text-gray-700 dark:text-gray-400 mb-6 line-clamp-3">
                             {blog.content}
                           </p>
 
@@ -503,7 +545,7 @@ const Blogs = () => {
                             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                               <span className="flex items-center gap-1">
                                 <Eye className="w-4 h-4" />
-                                {blog.views || Math.floor(Math.random() * 1000) + 100}
+                                {blog.views?.toLocaleString() || Math.floor(Math.random() * 1000) + 100}
                               </span>
                               <span className="flex items-center gap-1">
                                 <ThumbsUp className="w-4 h-4" />
@@ -515,7 +557,7 @@ const Blogs = () => {
                               </span>
                             </div>
                             
-                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-teal-500 group-hover:translate-x-2 transition-all" />
+                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-emerald-600 group-hover:translate-x-2 transition-all" />
                           </div>
                         </div>
                       </div>
@@ -526,7 +568,7 @@ const Blogs = () => {
             </>
           )}
 
-          {/* Newsletter CTA */}
+          {/* Newsletter CTA - Warm colors */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -535,7 +577,7 @@ const Blogs = () => {
             className="mt-24"
           >
             <div className="relative rounded-3xl overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500 animate-gradient-x" />
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-amber-600 to-orange-600 animate-gradient-x" />
               <div className="relative bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm p-12">
                 <div className="text-center">
                   <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
