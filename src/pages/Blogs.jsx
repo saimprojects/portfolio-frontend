@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import DOMPurify from "dompurify";
 
 class ErrorBoundary extends React.Component {
   state = { hasError: false };
@@ -67,12 +66,21 @@ class ErrorBoundary extends React.Component {
 // Helper function to strip HTML tags and get plain text
 const stripHtmlTags = (html) => {
   if (!html) return "";
-  const temp = document.createElement("div");
-  temp.innerHTML = html;
-  return temp.textContent || temp.innerText || "";
+  // Remove HTML tags
+  let text = html.replace(/<[^>]*>/g, ' ');
+  // Remove extra whitespace
+  text = text.replace(/\s+/g, ' ').trim();
+  // Decode HTML entities
+  text = text.replace(/&nbsp;/g, ' ')
+             .replace(/&amp;/g, '&')
+             .replace(/&lt;/g, '<')
+             .replace(/&gt;/g, '>')
+             .replace(/&quot;/g, '"')
+             .replace(/&#39;/g, "'");
+  return text;
 };
 
-// Helper function to truncate text to a certain length
+// Helper function to truncate text
 const truncateText = (text, maxLength = 150) => {
   if (!text) return "";
   if (text.length <= maxLength) return text;
@@ -108,25 +116,44 @@ const Blogs = () => {
         console.log("API Response:", response);
 
         if (mounted) {
-          const blogData = Array.isArray(response)
-            ? response
-            : response.blogs || [response] || [];
+          let blogData = [];
           
-          // Process blog content - strip HTML for display
+          // Handle different response formats
+          if (Array.isArray(response)) {
+            blogData = response;
+          } else if (response && response.blogs && Array.isArray(response.blogs)) {
+            blogData = response.blogs;
+          } else if (response && response.data && Array.isArray(response.data)) {
+            blogData = response.data;
+          } else if (response && response.results && Array.isArray(response.results)) {
+            blogData = response.results;
+          } else if (response && typeof response === 'object') {
+            // If it's a single object, convert to array
+            blogData = [response];
+          }
+          
+          console.log("Extracted blog data:", blogData.length, "blogs");
+          
+          // If no blogs from API, use sample data
+          if (blogData.length === 0) {
+            console.log("No blogs from API, using sample data");
+            blogData = generateSampleBlogs();
+          }
+          
+          // Process each blog - strip HTML from content for display
           const processedBlogs = blogData.map(blog => ({
             ...blog,
             plainContent: stripHtmlTags(blog.content || blog.excerpt || ""),
-            safeContent: blog.content ? DOMPurify.sanitize(blog.content) : blog.excerpt || ""
+            displayContent: truncateText(stripHtmlTags(blog.content || blog.excerpt || ""), 150)
           }));
           
-          const enhancedBlogs = processedBlogs.length > 0 ? processedBlogs : generateSampleBlogs();
-          setBlogs(enhancedBlogs);
-          setFilteredBlogs(enhancedBlogs);
+          setBlogs(processedBlogs);
+          setFilteredBlogs(processedBlogs);
           
           // Update category counts
           const updatedCategories = [...categories];
-          updatedCategories[0].count = enhancedBlogs.length;
-          enhancedBlogs.forEach(blog => {
+          updatedCategories[0].count = processedBlogs.length;
+          processedBlogs.forEach(blog => {
             if (blog.category) {
               const categoryIndex = updatedCategories.findIndex(cat => 
                 cat.id === blog.category.toLowerCase()
@@ -163,7 +190,7 @@ const Blogs = () => {
     if (searchTerm) {
       result = result.filter(blog =>
         blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        blog.plainContent?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (blog.plainContent || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
@@ -197,48 +224,115 @@ const Blogs = () => {
     return [
       {
         id: 1,
-        title: "Perplexity AI Pro Review (2025): The Smartest AI Search Assistant Yet",
-        content: "<p>If ChatGPT changed how we talk to AI, Perplexity AI is changing how we search. It's not just a chatbot or search engine — it's a complete research companion that provides cited answers from the web.</p>",
-        plainContent: "If ChatGPT changed how we talk to AI, Perplexity AI is changing how we search. It's not just a chatbot or search engine — it's a complete research companion that provides cited answers from the web.",
-        slug: "perplexity-ai-pro-review-2025",
-        published_date: "2025-01-15",
+        title: "The Reality of Cold Emailing (Before and After MostMailer Ai)",
+        content: "Cold emailing has always been one of the most powerful growth channels. No ads. No algorithms. Just a direct line to your ideal customer. But here's the problem. What worked before doesn't work the same way today.",
+        slug: "cold-emailing-reality",
+        published_date: "2026-04-16",
         author: "Sarah Chen",
-        read_time: "9 min read",
-        category: "technology",
-        tags: ["AI", "Search", "Productivity", "Review"],
-        views: 3420,
-        likes: 245,
-        comments: 67
+        read_time: "5 min read",
+        category: "general",
+        tags: ["Email", "Marketing", "Outreach"],
+        views: 684,
+        likes: 57,
+        comments: 18
       },
       {
         id: 2,
-        title: "Mastering React Hooks in 2024",
-        content: "<p>Learn advanced patterns and best practices for React Hooks that will make your components more efficient and maintainable. From useState to custom hooks, this guide covers everything you need to know.</p>",
-        plainContent: "Learn advanced patterns and best practices for React Hooks that will make your components more efficient and maintainable. From useState to custom hooks, this guide covers everything you need to know.",
-        slug: "mastering-react-hooks-2024",
-        published_date: "2024-12-20",
-        author: "John Doe",
-        read_time: "8 min read",
-        category: "webdev",
-        tags: ["React", "JavaScript", "Frontend"],
-        views: 1250,
-        likes: 89,
-        comments: 23
+        title: "Free Access to Premium AI Tools: ChatGPT-5, Gemini 2.5, Grok-4",
+        content: "Artificial Intelligence is evolving faster than any technology we've seen before. Tools like ChatGPT-5, Google Gemini 2.5 Pro, and Grok-4 are redefining how content is created. Most of these tools are paid, locked behind subscriptions.",
+        slug: "free-premium-ai-tools",
+        published_date: "2026-02-07",
+        author: "Mike Johnson",
+        read_time: "5 min read",
+        category: "general",
+        tags: ["AI", "ChatGPT", "Gemini"],
+        views: 408,
+        likes: 16,
+        comments: 21
       },
       {
         id: 3,
-        title: "The Future of Web Development",
-        content: "<p>Exploring upcoming trends and technologies that will shape web development in the coming years. From WebAssembly to Edge Computing, discover what's next.</p>",
-        plainContent: "Exploring upcoming trends and technologies that will shape web development in the coming years. From WebAssembly to Edge Computing, discover what's next.",
-        slug: "future-web-development",
-        published_date: "2024-12-10",
-        author: "Jane Smith",
-        read_time: "6 min read",
-        category: "technology",
-        tags: ["Web", "Trends", "Technology"],
-        views: 980,
-        likes: 65,
+        title: "How to Generate Free HD & 4K Images Using AI",
+        content: "In today's digital world, visual content is everything. With the rise of AI image generation, anyone can now create HD and 4K quality images for free, even without design experience.",
+        slug: "free-ai-images",
+        published_date: "2026-01-31",
+        author: "Emily Rodriguez",
+        read_time: "5 min read",
+        category: "general",
+        tags: ["AI", "Images", "Freelancing"],
+        views: 160,
+        likes: 51,
         comments: 15
+      },
+      {
+        id: 4,
+        title: "How YouTube Is Creating a New Generation of Financial Educators",
+        content: "YouTube has quietly become one of the most powerful platforms for financial education. What once required expensive courses or formal training is now available for free, on demand, and explained in plain language.",
+        slug: "youtube-financial-educators",
+        published_date: "2026-01-29",
+        author: "David Kim",
+        read_time: "5 min read",
+        category: "general",
+        tags: ["YouTube", "Finance", "Education"],
+        views: 178,
+        likes: 99,
+        comments: 17
+      },
+      {
+        id: 5,
+        title: "ChatGPT + Canva Pro: The Ultimate Combo for Content Creators",
+        content: "In today's fast-paced digital world, content creation, marketing, and branding demand speed, creativity, and consistency. ChatGPT and Canva Pro come together as a powerful productivity duo.",
+        slug: "chatgpt-canva-combo",
+        published_date: "2026-01-11",
+        author: "Lisa Wang",
+        read_time: "5 min read",
+        category: "general",
+        tags: ["ChatGPT", "Canva", "Productivity"],
+        views: 170,
+        likes: 12,
+        comments: 27
+      },
+      {
+        id: 6,
+        title: "YouTube Automation: How to Make Money with AI Videos",
+        content: "In 2026, YouTube automation has become one of the smartest ways to earn money online. You no longer need a camera, microphone, editing skills, or even to show your face.",
+        slug: "youtube-automation-ai",
+        published_date: "2025-11-28",
+        author: "Alex Turner",
+        read_time: "5 min read",
+        category: "general",
+        tags: ["YouTube", "Automation", "AI"],
+        views: 124,
+        likes: 69,
+        comments: 21
+      },
+      {
+        id: 7,
+        title: "The Complete Beginner's Guide to Minecraft Bedrock Edition",
+        content: "Minecraft has been around for more than a decade, and Bedrock Edition is the version most people play today. It runs on Windows, Xbox, PlayStation, Nintendo Switch, mobile, and even smart TVs.",
+        slug: "minecraft-bedrock-guide",
+        published_date: "2025-11-15",
+        author: "Steve Miner",
+        read_time: "5 min read",
+        category: "general",
+        tags: ["Minecraft", "Gaming", "Tutorial"],
+        views: 424,
+        likes: 30,
+        comments: 21
+      },
+      {
+        id: 8,
+        title: "ScalaCube: Free Minecraft Server Hosting for Everyone",
+        content: "Minecraft ka craze kabhi kam nahi hota, lekin server hosting ka masla har player ko face karna padta hai. Free servers hamesha limited resources, downtime, aur lag ke saath aate hain.",
+        slug: "scalacube-minecraft-hosting",
+        published_date: "2025-10-29",
+        author: "Rahul Sharma",
+        read_time: "5 min read",
+        category: "general",
+        tags: ["Minecraft", "Server", "Hosting"],
+        views: 551,
+        likes: 64,
+        comments: 5
       }
     ];
   };
@@ -277,8 +371,8 @@ const Blogs = () => {
         <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-300 transition-colors line-clamp-2">
           {blog.title}
         </h3>
-        <p className="text-white/90 mb-6 line-clamp-2">
-          {truncateText(blog.plainContent || blog.content, 120)}
+        <p className="text-white/90 mb-6 line-clamp-3">
+          {blog.displayContent || truncateText(blog.plainContent, 120)}
         </p>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 text-white/80 text-sm">
@@ -300,7 +394,7 @@ const Blogs = () => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-black py-12 md:py-20 px-4 sm:px-6 lg:px-12 relative overflow-hidden">
-        {/* Background Elements - Warm earthy tones */}
+        {/* Background Elements */}
         <div className="fixed inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-r from-emerald-500/5 to-amber-500/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-r from-orange-500/5 to-rose-500/5 rounded-full blur-3xl" />
@@ -335,31 +429,33 @@ const Blogs = () => {
           </motion.div>
 
           {/* Featured Blogs */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="mb-16"
-          >
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Featured Posts
-              </h2>
-              <Link
-                to="/blog/category/featured"
-                className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
-              >
-                View All Featured
-                <ChevronRight className="w-4 h-4" />
-              </Link>
-            </div>
-            
-            <div className="grid lg:grid-cols-3 gap-6">
-              {blogs.slice(0, 3).map((blog, index) => (
-                <FeaturedBlogCard key={blog.id} blog={blog} index={index} />
-              ))}
-            </div>
-          </motion.div>
+          {blogs.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="mb-16"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Featured Posts
+                </h2>
+                <Link
+                  to="/blog/category/featured"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
+                >
+                  View All Featured
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+              
+              <div className="grid lg:grid-cols-3 gap-6">
+                {blogs.slice(0, 3).map((blog, index) => (
+                  <FeaturedBlogCard key={blog.id} blog={blog} index={index} />
+                ))}
+              </div>
+            </motion.div>
+          )}
 
           {/* Filter Section */}
           <motion.div
@@ -472,7 +568,6 @@ const Blogs = () => {
                       className="group relative cursor-pointer"
                       onClick={() => navigate(`/blog/${blog.slug}`)}
                     >
-                      {/* Blog Card */}
                       <div className="relative h-full rounded-2xl bg-white dark:bg-gray-900/80 backdrop-blur-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-xl transition-all duration-500">
                         {/* Category Badge */}
                         <div className="absolute top-4 left-4 z-10">
@@ -481,17 +576,16 @@ const Blogs = () => {
                           </span>
                         </div>
 
-                        {/* Content */}
                         <div className="p-6">
                           {/* Meta Info */}
                           <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
                             <span className="flex items-center gap-1">
                               <CalendarDays className="w-4 h-4" />
-                              {new Date(blog.published_date).toLocaleDateString('en-US', {
+                              {blog.published_date ? new Date(blog.published_date).toLocaleDateString('en-US', {
                                 month: 'short',
                                 day: 'numeric',
                                 year: 'numeric'
-                              })}
+                              }) : "Recent"}
                             </span>
                             <span className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
@@ -504,9 +598,9 @@ const Blogs = () => {
                             {blog.title}
                           </h3>
 
-                          {/* Excerpt - Now showing clean text without HTML tags */}
+                          {/* Excerpt - Clean text without HTML */}
                           <p className="text-gray-700 dark:text-gray-400 mb-6 line-clamp-3">
-                            {truncateText(blog.plainContent || blog.content, 150)}
+                            {blog.displayContent || truncateText(blog.plainContent || blog.content, 150)}
                           </p>
 
                           {/* Tags */}
@@ -550,40 +644,6 @@ const Blogs = () => {
               </div>
             </>
           )}
-
-          {/* Newsletter CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mt-24"
-          >
-            <div className="relative rounded-3xl overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-amber-600 to-orange-600 animate-gradient-x" />
-              <div className="relative bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm p-12">
-                <div className="text-center">
-                  <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                    Never Miss an Update
-                  </h3>
-                  <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-                    Subscribe to my newsletter and get the latest articles, 
-                    tutorials, and insights delivered directly to your inbox.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="flex-1 px-6 py-3 bg-white/20 backdrop-blur-sm text-white placeholder-white/70 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50"
-                    />
-                    <button className="px-8 py-3 bg-white text-gray-900 font-semibold rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                      Subscribe
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </div>
     </ErrorBoundary>

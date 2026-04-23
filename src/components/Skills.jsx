@@ -49,22 +49,47 @@ const Skills = () => {
   ];
 
   useEffect(() => {
-    API.getSkills()
-      .then((res) => {
+    const fetchSkills = async () => {
+      try {
+        setLoading(true);
+        const res = await API.getSkills();
+        console.log("Skills API Response:", res);
+        
+        // Handle different response formats
+        let skillsData = [];
+        
+        if (Array.isArray(res)) {
+          skillsData = res;
+        } else if (res && res.data && Array.isArray(res.data)) {
+          skillsData = res.data;
+        } else if (res && res.skills && Array.isArray(res.skills)) {
+          skillsData = res.skills;
+        } else if (res && typeof res === 'object') {
+          // If it's a single object, check if it has skills property
+          if (res.skills) {
+            skillsData = Array.isArray(res.skills) ? res.skills : [res.skills];
+          } else {
+            skillsData = [res];
+          }
+        }
+        
         // Add category to skills if not present
-        const skillsWithCategory = res.data.map(skill => ({
+        const skillsWithCategory = skillsData.map(skill => ({
           ...skill,
           category: skill.category || getSkillCategory(skill.name)
         }));
+        
         setSkills(skillsWithCategory);
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Failed to load skills.");
-        // Fallback data
+      } catch (err) {
+        console.error("Error fetching skills:", err);
+        toast.error("Failed to load skills. Using sample data.");
         setSkills(getFallbackSkills());
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSkills();
   }, []);
 
   const getSkillCategory = (skillName) => {
@@ -81,15 +106,20 @@ const Skills = () => {
   };
 
   const getFallbackSkills = () => [
-    { id: 1, name: "React", proficiency: 90, category: "frontend" },
-    { id: 2, name: "JavaScript", proficiency: 95, category: "frontend" },
-    { id: 4, name: "Python", proficiency: 88, category: "backend" },
-    { id: 5, name: "Django", proficiency: 92, category: "backend" },
-    { id: 8, name: "PostgreSQL", proficiency: 83, category: "database" },
-    { id: 9, name: "Tailwind CSS", proficiency: 94, category: "frontend" },
-    { id: 10, name: "Docker", proficiency: 80, category: "tools" },
-    { id: 11, name: "AWS", proficiency: 78, category: "tools" },
-    { id: 12, name: "Git", proficiency: 95, category: "tools" },
+    { id: 1, name: "React", proficiency: 90, category: "frontend", years: "3+ years" },
+    { id: 2, name: "JavaScript", proficiency: 95, category: "frontend", years: "4+ years" },
+    { id: 3, name: "TypeScript", proficiency: 85, category: "frontend", years: "2+ years" },
+    { id: 4, name: "Python", proficiency: 88, category: "backend", years: "3+ years" },
+    { id: 5, name: "Django", proficiency: 92, category: "backend", years: "2+ years" },
+    { id: 6, name: "Node.js", proficiency: 87, category: "backend", years: "3+ years" },
+    { id: 7, name: "MongoDB", proficiency: 85, category: "database", years: "3+ years" },
+    { id: 8, name: "PostgreSQL", proficiency: 83, category: "database", years: "2+ years" },
+    { id: 9, name: "Tailwind CSS", proficiency: 94, category: "frontend", years: "3+ years" },
+    { id: 10, name: "Docker", proficiency: 80, category: "tools", years: "2+ years" },
+    { id: 11, name: "AWS", proficiency: 78, category: "tools", years: "1+ years" },
+    { id: 12, name: "Git", proficiency: 95, category: "tools", years: "4+ years" },
+    { id: 13, name: "Figma", proficiency: 88, category: "frontend", years: "2+ years" },
+    { id: 14, name: "React Native", proficiency: 82, category: "mobile", years: "2+ years" },
   ];
 
   const filteredSkills = activeCategory === "all" 
@@ -245,7 +275,7 @@ const Skills = () => {
                     <div className="flex items-center gap-1">
                       <TrendingUp className="w-4 h-4 text-teal-500" />
                       <span className="text-gray-600 dark:text-gray-400">
-                        {skill.years || Math.floor(skill.proficiency / 20)}+ years
+                        {skill.years || Math.floor(skill.proficiency / 20) + 1}+ years
                       </span>
                     </div>
                   </div>

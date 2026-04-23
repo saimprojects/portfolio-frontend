@@ -17,20 +17,69 @@ const Home = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      API.getProjects("?limit=3")
-        .then((res) => {
-          setProjects(res.data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error fetching projects:", err);
-          setLoading(false);
-        });
-    }, 2000);
-    return () => clearTimeout(timer);
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const res = await API.getProjects("?limit=3");
+        console.log("Projects API Response:", res);
+        
+        // Handle different response formats
+        let projectsData = [];
+        
+        if (Array.isArray(res)) {
+          projectsData = res;
+        } else if (res && res.data && Array.isArray(res.data)) {
+          projectsData = res.data;
+        } else if (res && res.projects && Array.isArray(res.projects)) {
+          projectsData = res.projects;
+        } else if (res && typeof res === 'object') {
+          // If it's a single object, check if it has projects property
+          if (res.projects) {
+            projectsData = Array.isArray(res.projects) ? res.projects : [res.projects];
+          } else {
+            projectsData = [res];
+          }
+        }
+        
+        setProjects(projectsData);
+      } catch (err) {
+        console.error("Error fetching projects:", err);
+        // Set fallback projects
+        setProjects(getFallbackProjects());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
   }, []);
+
+  const getFallbackProjects = () => [
+    {
+      id: 1,
+      title: "E-Commerce Platform",
+      description: "A full-featured e-commerce platform with payment integration and admin dashboard.",
+      slug: "ecommerce-platform",
+      tags: ["React", "Node.js", "MongoDB"],
+      image: "https://images.pexels.com/photos/270632/pexels-photo-270632.jpeg"
+    },
+    {
+      id: 2,
+      title: "Analytics Dashboard",
+      description: "Real-time analytics dashboard with customizable widgets and data visualization.",
+      slug: "analytics-dashboard",
+      tags: ["Next.js", "Tailwind", "Chart.js"],
+      image: "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg"
+    },
+    {
+      id: 3,
+      title: "Portfolio Website",
+      description: "Modern portfolio website with smooth animations and responsive design.",
+      slug: "portfolio-website",
+      tags: ["React", "Framer Motion", "Tailwind"],
+      image: "https://images.pexels.com/photos/276452/pexels-photo-276452.jpeg"
+    }
+  ];
 
   const Loader = () => (
     <motion.div
@@ -202,9 +251,9 @@ const Home = () => {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, index) => (
+          {projects.length > 0 && projects.map((project, index) => (
             <Tilt
-              key={project.id}
+              key={project.id || index}
               tiltMaxAngleX={8}
               tiltMaxAngleY={8}
               perspective={1000}
