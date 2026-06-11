@@ -1,51 +1,16 @@
 import { motion } from "framer-motion";
-import { 
-  FaGithub, 
-  FaLinkedin, 
-  FaInstagram, 
-  FaTwitter,
-  FaHeart,
-  FaCoffee
-} from "react-icons/fa";
-import { 
-  Link 
-} from "react-router-dom";
-import { 
-  Mail, 
-  MapPin, 
-  Phone,
-  ExternalLink,
-  Sparkles
-} from "lucide-react";
+import { FaGithub, FaLinkedin, FaInstagram, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { Mail, MapPin, Phone, ArrowUpRight } from "lucide-react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
 
-  const socialLinks = [
-    { 
-      icon: <FaGithub />, 
-      label: "GitHub", 
-      url: "https://github.com/saimprojects",
-      color: "hover:bg-gray-900 hover:text-white"
-    },
-    { 
-      icon: <FaLinkedin />, 
-      label: "LinkedIn", 
-      url: "https://www.linkedin.com/in/muhammad-saim-0821b4319/",
-      color: "hover:bg-blue-700 hover:text-white"
-    },
-    { 
-      icon: <FaTwitter />, 
-      label: "Twitter", 
-      url: "https://twitter.com",
-      color: "hover:bg-sky-500 hover:text-white"
-    },
-    { 
-      icon: <FaInstagram />, 
-      label: "Instagram", 
-      url: "https://www.instagram.com/expertsaimdev/",
-      color: "hover:bg-gradient-to-r from-purple-500 to-pink-500 hover:text-white"
-    },
+  const social = [
+    { icon: FaGithub, label: "GitHub", url: "https://github.com/saimprojects" },
+    { icon: FaLinkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/muhammad-saim-0821b4319/" },
+    { icon: FaTwitter, label: "Twitter", url: "https://twitter.com" },
+    { icon: FaInstagram, label: "Instagram", url: "https://www.instagram.com/expertsaimdev/" },
   ];
 
   const quickLinks = [
@@ -58,217 +23,157 @@ const Footer = () => {
 
   const legalLinks = [
     { name: "Privacy Policy", path: "/privacy-policy" },
-    { name: "Return & Refund Policy", path: "/return-refund-policy" },
+    { name: "Refund Policy", path: "/return-refund-policy" },
     { name: "Shipping Policy", path: "/shipping-policy" },
     { name: "Terms & Conditions", path: "/terms-and-conditions" },
     { name: "Sitemap", path: "/sitemap.xml", external: true },
   ];
 
-  const contactInfo = [
-    { icon: <Mail className="w-4 h-4" />, text: "saimpkf@gmail.com" },
-    { icon: <Phone className="w-4 h-4" />, text: "+92 313 147 1263" },
-    { icon: <MapPin className="w-4 h-4" />, text: "Karachi, Pakistan" },
+  const contact = [
+    { icon: Mail, text: "saimpkf@gmail.com", href: "mailto:saimpkf@gmail.com" },
+    { icon: Phone, text: "+92 313 147 1263", href: "tel:+923131471263" },
+    { icon: MapPin, text: "Karachi, Pakistan", href: null },
   ];
 
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] },
+    viewport: { once: true },
+  });
+
   return (
-    <footer className="relative bg-gradient-to-b from-transparent to-gray-100/50 dark:to-gray-900/50 pt-16 pb-8 px-4 sm:px-6 lg:px-12 overflow-hidden">
-      {/* Top Gradient Line */}
-      <motion.div
-        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500"
-        animate={{ 
-          backgroundPosition: ["0%", "100%"],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-        style={{
-          backgroundSize: "200% 100%",
-        }}
-      />
+    <footer className="bg-gray-50 dark:bg-[#0f0f0f] border-t border-gray-100 dark:border-gray-800">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 pt-16 pb-8">
 
-      {/* Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-r from-teal-500/5 to-purple-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-r from-amber-500/5 to-pink-500/5 rounded-full blur-3xl" />
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Main Footer Content */}
+        {/* Main grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Brand Section */}
-          <div className="space-y-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center gap-3"
-            >
-              <div className="p-2 rounded-lg bg-gradient-to-r from-teal-500 to-amber-500">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-teal-500 to-amber-500 bg-clip-text text-transparent">
-                Saim.dev
-              </h2>
-            </motion.div>
-            
-            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-              Building exceptional digital experiences with modern technologies. 
-              Passionate about clean code, great design, and innovative solutions.
+
+          {/* Brand */}
+          <motion.div {...fadeUp(0)} className="space-y-5">
+            <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">
+              saim<span className="text-teal-500">.</span>dev
+            </Link>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+              Full Stack Developer building clean, fast, and scalable web
+              applications. Based in Pakistan, available worldwide.
             </p>
-            
-            {/* Social Links */}
-            <div className="flex items-center gap-3 pt-4">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={social.label}
-                  href={social.url}
+
+            {/* Social icons */}
+            <div className="flex items-center gap-2 pt-1">
+              {social.map(({ icon: Icon, label, url }) => (
+                <a
+                  key={label}
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className={`p-2 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 ${social.color} transition-all duration-300 shadow-sm hover:shadow-md`}
-                  aria-label={social.label}
+                  aria-label={label}
+                  className="p-2 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
                 >
-                  <span className="text-lg">{social.icon}</span>
-                </motion.a>
+                  <Icon className="w-4 h-4" />
+                </a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">
-              Quick Links
-            </h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link, index) => (
-                <motion.li
-                  key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
+          {/* Quick links */}
+          <motion.div {...fadeUp(0.05)}>
+            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">
+              Navigation
+            </h4>
+            <ul className="space-y-2.5">
+              {quickLinks.map((link) => (
+                <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
                   >
-                    <span className="w-1 h-1 bg-teal-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                     {link.name}
                   </Link>
-                </motion.li>
+                </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Legal Links */}
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">
+          {/* Legal */}
+          <motion.div {...fadeUp(0.1)}>
+            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">
               Legal
-            </h3>
-            <ul className="space-y-3">
-              {legalLinks.map((link, index) => (
-                <motion.li
-                  key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
+            </h4>
+            <ul className="space-y-2.5">
+              {legalLinks.map((link) => (
+                <li key={link.name}>
                   {link.external ? (
                     <a
                       href={link.path}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                      className="inline-flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
                     >
-                      <span className="w-1 h-1 bg-teal-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                       {link.name}
-                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <ArrowUpRight className="w-3 h-3" />
                     </a>
                   ) : (
                     <Link
                       to={link.path}
-                      className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
                     >
-                      <span className="w-1 h-1 bg-teal-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                       {link.name}
                     </Link>
                   )}
-                </motion.li>
+                </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">
-              Get In Touch
-            </h3>
-            <ul className="space-y-4">
-              {contactInfo.map((info, index) => (
-                <motion.li
-                  key={info.text}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-3 text-gray-600 dark:text-gray-400"
-                >
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-teal-500/10 to-amber-500/10 text-teal-500">
-                    {info.icon}
-                  </div>
-                  <span className="text-sm">{info.text}</span>
-                </motion.li>
+          {/* Contact */}
+          <motion.div {...fadeUp(0.15)}>
+            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">
+              Contact
+            </h4>
+            <ul className="space-y-3">
+              {contact.map(({ icon: Icon, text, href }) => (
+                <li key={text}>
+                  {href ? (
+                    <a
+                      href={href}
+                      className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                    >
+                      <Icon className="w-4 h-4 shrink-0" />
+                      {text}
+                    </a>
+                  ) : (
+                    <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                      <Icon className="w-4 h-4 shrink-0" />
+                      {text}
+                    </div>
+                  )}
+                </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent my-8" />
+        <div className="h-px bg-gray-200 dark:bg-gray-800 mb-6" />
 
-        {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
-          >
-            <span>© {currentYear} Muhammad Saim. All rights reserved.</span>
-            <FaHeart className="text-red-500 animate-pulse" />
-          </motion.div>
+        {/* Bottom bar */}
+        <motion.div
+          {...fadeUp(0.2)}
+          className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400"
+        >
+          <span>© {year} Muhammad Saim. All rights reserved.</span>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400"
-          >
-            <span className="flex items-center gap-2">
-              <FaCoffee className="text-amber-600" />
-              Built with React & Django
-            </span>
-            <span>•</span>
-            <span>Made in Pakistan</span>
-          </motion.div>
+          <span className="hidden sm:block">Built with React &amp; Django · Made in Pakistan 🇵🇰</span>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-sm text-gray-600 dark:text-gray-400"
+          <a
+            href="#top"
+            className="hover:text-teal-500 transition-colors"
           >
-            <a
-              href="#top"
-              className="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
-            >
-              Back to top ↑
-            </a>
-          </motion.div>
-        </div>
+            Back to top ↑
+          </a>
+        </motion.div>
       </div>
     </footer>
   );

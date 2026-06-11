@@ -2,20 +2,10 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import Typed from "typed.js";
-import Particles from "react-tsparticles";
-import { loadSlim } from "tsparticles-slim";
-import { 
-  ArrowRight, 
-  Download, 
-  Sparkles, 
-  Code, 
-  Palette,
-  Rocket
-} from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 
 const Hero = () => {
   const typedRef = useRef(null);
-  const statsRef = useRef(null);
 
   useEffect(() => {
     const typed = new Typed(typedRef.current, {
@@ -23,340 +13,199 @@ const Hero = () => {
         "Full Stack Developer",
         "UI/UX Designer",
         "Problem Solver",
-        "Tech Enthusiast",
         "Code Craftsman",
       ],
-      typeSpeed: 60,
-      backSpeed: 40,
-      backDelay: 1500,
+      typeSpeed: 55,
+      backSpeed: 35,
+      backDelay: 1800,
       loop: true,
       showCursor: true,
-      cursorChar: "▌",
+      cursorChar: "_",
     });
-
     return () => typed.destroy();
   }, []);
 
-  const particlesInit = async (engine) => {
-    await loadSlim(engine);
-  };
-
   const stats = [
-    { value: "50+", label: "Projects Completed" },
-    { value: "30+", label: "Happy Clients" },
-    { value: "3+", label: "Years Experience" },
-    { value: "98%", label: "Success Rate" },
+    { value: "50+", label: "Projects" },
+    { value: "30+", label: "Clients" },
+    { value: "3+", label: "Years" },
+    { value: "98%", label: "Success" },
   ];
 
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+  });
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-12">
-      {/* Animated Background Particles */}
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        className="absolute inset-0"
-        options={{
-          background: {
-            color: {
-              value: "transparent",
-            },
-          },
-          fpsLimit: 120,
-          interactivity: {
-            events: {
-              onClick: {
-                enable: true,
-                mode: "push",
-              },
-              onHover: {
-                enable: true,
-                mode: "repulse",
-              },
-            },
-            modes: {
-              push: {
-                quantity: 4,
-              },
-              repulse: {
-                distance: 100,
-                duration: 0.4,
-              },
-            },
-          },
-          particles: {
-            color: {
-              value: ["#0d9488", "#f59e0b", "#8b5cf6"],
-            },
-            links: {
-              color: "#0d9488",
-              distance: 150,
-              enable: true,
-              opacity: 0.2,
-              width: 1,
-            },
-            move: {
-              direction: "none",
-              enable: true,
-              outModes: {
-                default: "bounce",
-              },
-              random: false,
-              speed: 2,
-              straight: false,
-            },
-            number: {
-              density: {
-                enable: true,
-                area: 800,
-              },
-              value: 60,
-            },
-            opacity: {
-              value: 0.3,
-            },
-            shape: {
-              type: "circle",
-            },
-            size: {
-              value: { min: 1, max: 5 },
-            },
-          },
-          detectRetina: true,
+    <section className="relative min-h-screen flex items-center bg-white dark:bg-[#0a0a0a]">
+      {/* Subtle grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
         }}
       />
+      <div className="absolute inset-0 pointer-events-none dark:hidden"
+        style={{ background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(13,148,136,0.06), transparent)" }}
+      />
+      <div className="absolute inset-0 pointer-events-none hidden dark:block"
+        style={{ background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(13,148,136,0.08), transparent)" }}
+      />
 
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-amber-500/5" />
-      <div className="absolute inset-0 bg-gradient-to-t from-white/50 dark:from-black/50 via-transparent to-transparent" />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            {/* Badge */}
-            {/* <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500/10 to-amber-500/10 rounded-full"
-            >
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                Welcome to my portfolio
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full py-32">
+        <div className="grid lg:grid-cols-[1fr_400px] gap-20 items-center">
+          {/* Left */}
+          <div>
+            {/* Eyebrow */}
+            <motion.div {...fadeUp(0.1)}>
+              <span className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 dark:text-teal-400 tracking-widest uppercase mb-6">
+                <span className="w-6 h-px bg-teal-500" />
+                Available for hire
               </span>
-            </motion.div> */}
+            </motion.div>
 
-            {/* Main Heading */}
+            {/* Heading */}
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold"
+              {...fadeUp(0.2)}
+              className="text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-[1.1] tracking-tight text-gray-900 dark:text-white mb-4"
             >
               Hi, I'm{" "}
-              <span className="bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500 bg-clip-text text-transparent">
-                Muhammad Saim
-              </span>
+              <span className="text-teal-500">Muhammad Saim</span>
             </motion.h1>
 
-            {/* Typed Text */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300"
-            >
-              <span className="font-medium">I'm a </span>
-              <span ref={typedRef} className="text-teal-500 font-semibold" />
+            {/* Typed */}
+            <motion.div {...fadeUp(0.3)} className="mb-6">
+              <span className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 font-light">
+                I specialize in{" "}
+              </span>
+              <span
+                ref={typedRef}
+                className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white"
+              />
             </motion.div>
 
             {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl"
+              {...fadeUp(0.4)}
+              className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl mb-10"
             >
-              I build exceptional digital experiences that are fast, accessible, 
-              visually appealing, and responsive. Let's bring your ideas to life!
+              I craft fast, accessible, and visually refined web applications —
+              from pixel-perfect interfaces to scalable backend systems. Based in
+              Pakistan, working worldwide.
             </motion.p>
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-4 pt-4"
-            >
+            {/* CTAs */}
+            <motion.div {...fadeUp(0.5)} className="flex flex-wrap gap-3 mb-16">
               <Link
                 to="/projects"
-                className="group inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-teal-500 to-amber-500 text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center gap-2.5 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
               >
-                <span>View My Work</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                View My Work
+                <ArrowRight className="w-4 h-4" />
               </Link>
-              
               <Link
                 to="/contact"
-                className="group inline-flex items-center gap-3 px-8 py-3 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold rounded-xl hover:border-teal-500 hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center gap-2.5 px-6 py-3 bg-transparent border border-gray-200 dark:border-gray-800 hover:border-teal-500 dark:hover:border-teal-500 text-gray-700 dark:text-gray-300 text-sm font-semibold rounded-lg transition-colors duration-200"
               >
-                <span>Get In Touch</span>
-                <Rocket className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Get In Touch
               </Link>
             </motion.div>
 
             {/* Stats */}
             <motion.div
-              ref={statsRef}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8"
+              {...fadeUp(0.6)}
+              className="grid grid-cols-4 gap-8 pt-8 border-t border-gray-100 dark:border-gray-800"
             >
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className="text-center p-4 rounded-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-800/50"
-                >
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {stat.value}
+              {stats.map((s, i) => (
+                <div key={i}>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">
+                    {s.value}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {stat.label}
-                  </div>
+                  <div className="text-sm text-gray-400 mt-0.5">{s.label}</div>
                 </div>
               ))}
             </motion.div>
-          </motion.div>
+          </div>
 
-          {/* Right Content - 3D Card/Illustration */}
+          {/* Right — Code card */}
           <motion.div
-            initial={{ opacity: 0, x: 50, rotateY: 90 }}
-            animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="relative"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="relative hidden lg:block"
           >
-            {/* Floating Card */}
-            <div className="relative perspective-1000">
-              {/* Main Card */}
-              <motion.div
-                animate={{ 
-                  y: [0, -20, 0],
-                  rotateX: [0, 5, 0],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="relative rounded-3xl overflow-hidden border-4 border-white dark:border-gray-900 shadow-2xl bg-gradient-to-br from-gray-900 to-black"
-                style={{
-                  transformStyle: "preserve-3d",
-                }}
-              >
-                {/* Code Editor Simulation */}
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-6">
-                    <div className="flex gap-1">
-                      <div className="w-3 h-3 rounded-full bg-red-500" />
-                      <div className="w-3 h-3 rounded-full bg-amber-500" />
-                      <div className="w-3 h-3 rounded-full bg-green-500" />
-                    </div>
-                    <div className="text-sm text-gray-400">portfolio.jsx</div>
-                  </div>
-                  
-                  <div className="font-mono text-sm space-y-2">
-                    <div className="text-gray-400">
-                      <span className="text-purple-500">const</span>{' '}
-                      <span className="text-teal-400">Developer</span> = {'{'}
-                    </div>
-                    <div className="text-gray-400 ml-4">
-                      <span className="text-amber-400">name</span>:
-                      <span className="text-green-400"> "Muhammad Saim"</span>,
-                    </div>
-                    <div className="text-gray-400 ml-4">
-                      <span className="text-amber-400">role</span>:
-                      <span className="text-green-400"> "Full Stack Developer"</span>,
-                    </div>
-                    <div className="text-gray-400 ml-4">
-                      <span className="text-amber-400">skills</span>:[
-                      <span className="text-blue-400">"React"</span>,
-                      <span className="text-blue-400">"Django"</span>,
-                      <span className="text-blue-400">"JavaScript"</span>
-                      ],
-                    </div>
-                    <div className="text-gray-400 ml-4">
-                      <span className="text-amber-400">passion</span>:
-                      <span className="text-green-400"> "Building amazing web experiences"</span>
-                    </div>
-                    <div className="text-gray-400">{'};'}</div>
-                  </div>
+            <div className="relative rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 bg-[#0d1117] shadow-2xl">
+              {/* Window bar */}
+              <div className="flex items-center gap-1.5 px-4 py-3 border-b border-gray-800">
+                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                <span className="ml-3 text-xs text-gray-500 font-mono">portfolio.jsx</span>
+              </div>
+
+              {/* Code */}
+              <div className="p-6 font-mono text-sm leading-7">
+                <div>
+                  <span className="text-[#ff7b72]">const</span>{" "}
+                  <span className="text-[#79c0ff]">Developer</span>{" "}
+                  <span className="text-gray-400">= {"{"}</span>
                 </div>
+                {[
+                  { key: "name", val: '"Muhammad Saim"', c: "#a5d6ff" },
+                  { key: "role", val: '"Full Stack Developer"', c: "#a5d6ff" },
+                  { key: "stack", val: '["React", "Django", "Node.js"]', c: "#ffa657" },
+                  { key: "location", val: '"Pakistan 🇵🇰"', c: "#a5d6ff" },
+                  { key: "open", val: "true", c: "#79c0ff" },
+                ].map((line, i) => (
+                  <div key={i} className="ml-6">
+                    <span className="text-[#e3b341]">{line.key}</span>
+                    <span className="text-gray-400">: </span>
+                    <span style={{ color: line.c }}>{line.val}</span>
+                    <span className="text-gray-400">,</span>
+                  </div>
+                ))}
+                <div className="text-gray-400">{"};"}</div>
 
-                {/* Floating Elements */}
+                {/* Blinking cursor */}
                 <motion.div
-                  animate={{ 
-                    y: [0, -10, 0],
-                    rotate: [0, 5, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1
-                  }}
-                  className="absolute top-1/4 -right-8 p-3 bg-gradient-to-r from-teal-500 to-amber-500 rounded-xl shadow-xl"
-                >
-                  <Code className="w-6 h-6 text-white" />
-                </motion.div>
-
-                <motion.div
-                  animate={{ 
-                    y: [0, -15, 0],
-                    rotate: [0, -5, 0],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 2
-                  }}
-                  className="absolute bottom-1/4 -left-8 p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl shadow-xl"
-                >
-                  <Palette className="w-6 h-6 text-white" />
-                </motion.div>
-              </motion.div>
-
-              {/* Glow Effect */}
-              <div className="absolute -inset-4 bg-gradient-to-r from-teal-500/20 via-amber-500/20 to-purple-500/20 rounded-3xl blur-2xl -z-10" />
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="mt-4 w-2 h-5 bg-teal-400 inline-block"
+                />
+              </div>
             </div>
+
+            {/* Floating badge */}
+            <motion.div
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -bottom-4 -left-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 shadow-lg"
+            >
+              <div className="text-xs text-gray-400 mb-0.5">Currently building</div>
+              <div className="text-sm font-semibold text-gray-900 dark:text-white">SaaS Platform</div>
+            </motion.div>
           </motion.div>
         </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="flex flex-col items-center gap-2 text-gray-500 dark:text-gray-400"
-          >
-            <span className="text-sm">Scroll down</span>
-            <div className="w-6 h-10 border-2 border-gray-400 dark:border-gray-600 rounded-full p-1">
-              <div className="w-1.5 h-3 bg-gray-400 dark:bg-gray-600 rounded-full" />
-            </div>
-          </motion.div>
-        </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-gray-400"
+      >
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="w-px h-10 bg-gradient-to-b from-transparent to-gray-400"
+        />
+        <span className="text-xs tracking-widest uppercase">Scroll</span>
+      </motion.div>
     </section>
   );
 };

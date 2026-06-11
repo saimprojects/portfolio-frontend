@@ -3,54 +3,30 @@ import About from "../components/About";
 import Skills from "../components/Skills";
 import { useEffect, useState } from "react";
 import API from "../api";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FaArrowRight, FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-import Tilt from "react-parallax-tilt";
-import { Sparkles, MousePointerClick } from "lucide-react";
+import { ArrowRight, Github, ExternalLink } from "lucide-react";
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { scrollYProgress } = useScroll();
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        setLoading(true);
         const res = await API.getProjects("?limit=3");
-        console.log("Projects API Response:", res);
-        
-        // Handle different response formats
-        let projectsData = [];
-        
-        if (Array.isArray(res)) {
-          projectsData = res;
-        } else if (res && res.data && Array.isArray(res.data)) {
-          projectsData = res.data;
-        } else if (res && res.projects && Array.isArray(res.projects)) {
-          projectsData = res.projects;
-        } else if (res && typeof res === 'object') {
-          // If it's a single object, check if it has projects property
-          if (res.projects) {
-            projectsData = Array.isArray(res.projects) ? res.projects : [res.projects];
-          } else {
-            projectsData = [res];
-          }
-        }
-        
-        setProjects(projectsData);
-      } catch (err) {
-        console.error("Error fetching projects:", err);
-        // Set fallback projects
+        let data = [];
+        if (Array.isArray(res)) data = res;
+        else if (res?.data && Array.isArray(res.data)) data = res.data;
+        else if (res?.projects && Array.isArray(res.projects)) data = res.projects;
+        else data = getFallbackProjects();
+        setProjects(data);
+      } catch {
         setProjects(getFallbackProjects());
       } finally {
         setLoading(false);
       }
     };
-
     fetchProjects();
   }, []);
 
@@ -58,397 +34,254 @@ const Home = () => {
     {
       id: 1,
       title: "E-Commerce Platform",
-      description: "A full-featured e-commerce platform with payment integration and admin dashboard.",
+      description:
+        "A full-featured e-commerce platform with payment integration, real-time inventory, and an admin dashboard.",
       slug: "ecommerce-platform",
       tags: ["React", "Node.js", "MongoDB"],
-      image: "https://images.pexels.com/photos/270632/pexels-photo-270632.jpeg"
+      image: "https://images.pexels.com/photos/270632/pexels-photo-270632.jpeg",
+      year: "2024",
     },
     {
       id: 2,
       title: "Analytics Dashboard",
-      description: "Real-time analytics dashboard with customizable widgets and data visualization.",
+      description:
+        "Real-time analytics dashboard with customizable widgets, role-based access, and data export.",
       slug: "analytics-dashboard",
       tags: ["Next.js", "Tailwind", "Chart.js"],
-      image: "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg"
+      image: "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg",
+      year: "2024",
     },
     {
       id: 3,
       title: "Portfolio Website",
-      description: "Modern portfolio website with smooth animations and responsive design.",
+      description:
+        "Modern portfolio website with smooth animations, CMS integration, and 100 Lighthouse score.",
       slug: "portfolio-website",
       tags: ["React", "Framer Motion", "Tailwind"],
-      image: "https://images.pexels.com/photos/276452/pexels-photo-276452.jpeg"
-    }
-  ];
-
-  const Loader = () => (
-    <motion.div
-      className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black z-50 overflow-hidden"
-      initial={{ opacity: 1 }}
-      animate={{ opacity: loading ? 1 : 0 }}
-      transition={{ duration: 0.8 }}
-      style={{ pointerEvents: loading ? "auto" : "none" }}
-    >
-      <div className="relative w-64 h-64">
-        <motion.div
-          className="absolute inset-0 border-4 border-teal-500/30 rounded-full"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute inset-4 border-4 border-transparent border-t-amber-500 rounded-full"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <motion.div
-            className="text-white text-xl font-bold tracking-wider"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            LOADING
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  const websites = [
-    { 
-      id: 1, 
-      image: "https://images.pexels.com/photos/270632/pexels-photo-270632.jpeg",
-      title: "E-Commerce Platform",
-      tags: ["React", "Node.js", "MongoDB"]
-    },
-    { 
-      id: 2, 
-      image: "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg",
-      title: "Dashboard UI",
-      tags: ["Next.js", "Tailwind", "Chart.js"]
-    },
-    { 
-      id: 3, 
       image: "https://images.pexels.com/photos/276452/pexels-photo-276452.jpeg",
-      title: "Portfolio Design",
-      tags: ["React", "Framer Motion", "GSAP"]
-    },
-    { 
-      id: 4, 
-      image: "https://images.pexels.com/photos/177598/pexels-photo-177598.jpeg",
-      title: "Blog System",
-      tags: ["Next.js", "Sanity", "Vercel"]
-    },
-    { 
-      id: 5, 
-      image: "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg",
-      title: "SaaS Platform",
-      tags: ["React", "Firebase", "Stripe"]
+      year: "2023",
     },
   ];
+
+  const showcaseImages = [
+    { id: 1, image: "https://images.pexels.com/photos/270632/pexels-photo-270632.jpeg", title: "E-Commerce UI" },
+    { id: 2, image: "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg", title: "Dashboard" },
+    { id: 3, image: "https://images.pexels.com/photos/276452/pexels-photo-276452.jpeg", title: "Portfolio" },
+    { id: 4, image: "https://images.pexels.com/photos/177598/pexels-photo-177598.jpeg", title: "Blog System" },
+    { id: 5, image: "https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg", title: "SaaS Platform" },
+    { id: 6, image: "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg", title: "Mobile App" },
+  ];
+
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+    viewport: { once: true },
+  });
 
   return (
-    <div className="font-inter bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-black text-gray-900 dark:text-white relative overflow-hidden">
-      {loading && <Loader />}
-      
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-amber-500/10 to-pink-500/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-      </div>
-
-      {/* Floating Particles */}
-      <div className="fixed inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-teal-500/30 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              y: [null, -50, 50, 0],
-              opacity: [0.3, 0.7, 0.3],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
-
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-amber-500/5"
-        style={{ y: backgroundY }}
-      />
-      
+    <div className="bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white">
       <Hero />
       <About />
       <Skills />
 
-      {/* Featured Projects Section */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
-        <div className="flex items-center justify-between mb-16">
-          <div>
-            <motion.div
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500/10 to-amber-500/10 rounded-full mb-4"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                Featured Work
+      {/* ── Featured Projects ───────────────────────────── */}
+      <section className="py-28 px-6 md:px-12 lg:px-16 bg-gray-50 dark:bg-[#0f0f0f]">
+        <div className="max-w-7xl mx-auto">
+          {/* Header row */}
+          <div className="flex items-end justify-between mb-16">
+            <motion.div {...fadeUp(0)}>
+              <span className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 dark:text-teal-400 tracking-widest uppercase mb-4">
+                <span className="w-6 h-px bg-teal-500" />
+                Selected Work
               </span>
+              <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold tracking-tight text-gray-900 dark:text-white">
+                Featured projects
+              </h2>
             </motion.div>
-            <motion.h2
-              className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              Selected <span className="bg-gradient-to-r from-teal-500 to-amber-500 bg-clip-text text-transparent">Projects</span>
-            </motion.h2>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <Link
-              to="/projects"
-              className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-amber-500 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-teal-500/25 transition-all duration-300"
-            >
-              View All
-              <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </motion.div>
-        </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {projects.length > 0 && projects.map((project, index) => (
-            <Tilt
-              key={project.id || index}
-              tiltMaxAngleX={8}
-              tiltMaxAngleY={8}
-              perspective={1000}
-              scale={1.02}
-              transitionSpeed={800}
-              glareEnable={true}
-              glareMaxOpacity={0.2}
-              glareColor="#ffffff"
-              glarePosition="all"
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative h-full rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl overflow-hidden border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl transition-all duration-500"
+            <motion.div {...fadeUp(0.1)} className="hidden sm:block">
+              <Link
+                to="/projects"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
               >
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-transparent to-teal-500/0 group-hover:to-teal-500/10 transition-all duration-500" />
-                
-                {/* Project Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <motion.img
-                    src={project.image || `https://images.unsplash.com/photo-${index % 2 === 0 ? "1551650975" : "1545235617"}`}
+                All projects
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Project cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, index) => (
+              <motion.article
+                key={project.id || index}
+                {...fadeUp(index * 0.08)}
+                className="group flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-[#141414] border border-gray-100 dark:border-gray-800 hover:border-teal-500/30 dark:hover:border-teal-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/5"
+              >
+                {/* Image */}
+                <div className="relative h-52 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <img
+                    src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    whileHover={{ scale: 1.1 }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  {project.year && (
+                    <span className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full">
+                      {project.year}
+                    </span>
+                  )}
                 </div>
 
-                {/* Project Content */}
-                <div className="p-6 relative">
-                  <div className="flex flex-wrap gap-2 mb-4">
+                {/* Content */}
+                <div className="flex flex-col flex-1 p-6">
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {project.tags?.slice(0, 3).map((tag, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-xs font-medium rounded-full"
+                        className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  
-                  <motion.h3
-                    className="text-2xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors"
-                  >
+
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-teal-500 transition-colors duration-200">
                     {project.title}
-                  </motion.h3>
-                  
-                  <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-2">
+                  </h3>
+
+                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed flex-1 mb-6 line-clamp-2">
                     {project.description}
                   </p>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center justify-between">
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
                     <Link
                       to={`/project/${project.slug}`}
-                      className="group/btn inline-flex items-center text-sm font-semibold text-teal-500 dark:text-teal-400 hover:text-teal-600 dark:hover:text-teal-300"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-500 hover:text-teal-600 transition-colors"
                     >
-                      View Case Study
-                      <FaArrowRight className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                      Case study
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
-                    
-                    <div className="flex items-center gap-3">
-                      <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                        <FaGithub className="w-5 h-5" />
+                    <div className="flex items-center gap-1">
+                      <button
+                        aria-label="View on GitHub"
+                        className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <Github className="w-4 h-4" />
                       </button>
-                      <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                        <FaExternalLinkAlt className="w-5 h-5" />
+                      <button
+                        aria-label="Live demo"
+                        className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            </Tilt>
-          ))}
-        </div>
-      </section>
+              </motion.article>
+            ))}
+          </div>
 
-      {/* Website Showcase Section */}
-      <section className="py-24 relative overflow-hidden bg-gradient-to-b from-transparent to-gray-100/50 dark:to-gray-900/50">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-4xl md:text-5xl font-bold mb-4">
-              Design <span className="bg-gradient-to-r from-amber-500 to-pink-500 bg-clip-text text-transparent">Showcase</span>
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              A collection of modern website designs with cutting-edge technologies
-            </p>
-          </motion.div>
-
-          <div className="relative">
-            {/* Infinite Scroll Container */}
-            <div className="py-8">
-              <motion.div
-                className="flex gap-6"
-                animate={{
-                  x: ["0%", "-50%"],
-                }}
-                transition={{
-                  x: {
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    duration: 30,
-                    ease: "linear",
-                  },
-                }}
-              >
-                {[...websites, ...websites].map((website, index) => (
-                  <motion.div
-                    key={`${website.id}-${index}`}
-                    className="group relative w-80 h-64 flex-shrink-0 cursor-pointer"
-                    whileHover={{ y: -10 }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-purple-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative h-full rounded-2xl overflow-hidden border border-gray-200/50 dark:border-gray-700/50 shadow-lg group-hover:shadow-2xl transition-all duration-500">
-                      <img
-                        src={website.image}
-                        alt={website.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute bottom-0 p-6">
-                          <h4 className="text-white font-bold text-lg mb-2">
-                            {website.title}
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {website.tags.map((tag, i) => (
-                              <span
-                                key={i}
-                                className="px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Instruction Text */}
-            <motion.div
-              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
+          {/* Mobile "All projects" link */}
+          <div className="sm:hidden mt-8 text-center">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-teal-500"
             >
-              <MousePointerClick className="w-4 h-4" />
-              <span>Hover to preview</span>
-            </motion.div>
+              View all projects <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 md:px-12 max-w-4xl mx-auto text-center relative z-10">
-        <motion.div
-          className="relative rounded-3xl overflow-hidden"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500 animate-gradient-x" />
-          <div className="relative bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm p-12">
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Let's Build Something Amazing
+      {/* ── Showcase strip ─────────────────────────────── */}
+      <section className="py-28 bg-white dark:bg-[#0a0a0a] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 mb-12">
+          <motion.div {...fadeUp(0)}>
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 dark:text-teal-400 tracking-widest uppercase mb-4">
+              <span className="w-6 h-px bg-teal-500" />
+              Design Gallery
+            </span>
+            <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold tracking-tight text-gray-900 dark:text-white">
+              A taste of the work
+            </h2>
+          </motion.div>
+        </div>
+
+        {/* Marquee */}
+        <div className="relative">
+          <motion.div
+            className="flex gap-5"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ x: { repeat: Infinity, repeatType: "loop", duration: 35, ease: "linear" } }}
+          >
+            {[...showcaseImages, ...showcaseImages].map((item, i) => (
+              <div
+                key={`${item.id}-${i}`}
+                className="relative w-72 h-52 flex-shrink-0 rounded-2xl overflow-hidden group"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-0 p-4">
+                    <span className="text-white text-sm font-semibold">{item.title}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Edge fades */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-[#0a0a0a] to-transparent pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-[#0a0a0a] to-transparent pointer-events-none" />
+        </div>
+      </section>
+
+      {/* ── CTA ───────────────────────────────────────── */}
+      <section className="py-28 px-6 md:px-12 lg:px-16 bg-gray-50 dark:bg-[#0f0f0f]">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            {...fadeUp(0)}
+            className="rounded-3xl bg-gray-900 dark:bg-white/5 border border-gray-800 dark:border-white/10 px-8 py-16 md:py-20 text-center"
+          >
+            {/* Small label */}
+            <span className="inline-block text-xs font-semibold tracking-widest text-teal-400 uppercase mb-6">
+              Open to opportunities
+            </span>
+
+            <h3 className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-white leading-tight mb-4">
+              Have a project in mind?
+              <br />
+              Let's build it together.
             </h3>
-            <p className="text-white/90 mb-8 text-lg">
-              Have a project in mind? Let's discuss how we can bring your ideas to life.
+
+            <p className="text-gray-400 text-lg mb-10 max-w-xl mx-auto">
+              Whether it's a startup MVP, a design system, or a full-scale web
+              application — I'm ready to help.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/contact"
-                className="px-8 py-3 bg-white text-gray-900 font-semibold rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-teal-500 hover:bg-teal-400 text-white text-sm font-semibold rounded-xl transition-colors duration-200"
               >
-                Get In Touch
+                Start a conversation
+                <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/projects"
-                className="px-8 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white text-sm font-semibold rounded-xl transition-colors duration-200"
               >
-                View All Projects
+                Browse projects
               </Link>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
     </div>
   );
