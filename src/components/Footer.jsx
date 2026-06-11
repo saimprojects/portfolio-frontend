@@ -7,61 +7,60 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   const social = [
-    { icon: FaGithub, label: "GitHub", url: "https://github.com/saimprojects" },
-    { icon: FaLinkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/muhammad-saim-0821b4319/" },
-    { icon: FaTwitter, label: "Twitter", url: "https://twitter.com" },
+    { icon: FaGithub,    label: "GitHub",    url: "https://github.com/saimprojects" },
+    { icon: FaLinkedin,  label: "LinkedIn",  url: "https://www.linkedin.com/in/muhammad-saim-0821b4319/" },
+    { icon: FaTwitter,   label: "Twitter",   url: "https://twitter.com" },
     { icon: FaInstagram, label: "Instagram", url: "https://www.instagram.com/expertsaimdev/" },
   ];
 
   const quickLinks = [
-    { name: "Home", path: "/" },
+    { name: "Home",     path: "/" },
     { name: "Projects", path: "/projects" },
-    { name: "Blogs", path: "/blogs" },
+    { name: "Blogs",    path: "/blogs" },
     { name: "Services", path: "/services" },
-    { name: "Contact", path: "/contact" },
+    { name: "Contact",  path: "/contact" },
   ];
 
   const legalLinks = [
-    { name: "Privacy Policy", path: "/privacy-policy" },
-    { name: "Refund Policy", path: "/return-refund-policy" },
-    { name: "Shipping Policy", path: "/shipping-policy" },
-    { name: "Terms & Conditions", path: "/terms-and-conditions" },
-    { name: "Sitemap", path: "/sitemap.xml", external: true },
+    { name: "Privacy Policy",       path: "/privacy-policy" },
+    { name: "Refund Policy",        path: "/return-refund-policy" },
+    { name: "Shipping Policy",      path: "/shipping-policy" },
+    { name: "Terms & Conditions",   path: "/terms-and-conditions" },
+    { name: "Sitemap",              path: "/sitemap.xml", external: true },
   ];
 
   const contact = [
-    { icon: Mail, text: "saimpkf@gmail.com", href: "mailto:saimpkf@gmail.com" },
-    { icon: Phone, text: "+92 313 147 1263", href: "tel:+923131471263" },
-    { icon: MapPin, text: "Karachi, Pakistan", href: null },
+    { icon: Mail,   text: "saimpkf@gmail.com",  href: "mailto:saimpkf@gmail.com" },
+    { icon: Phone,  text: "+92 313 147 1263",    href: "tel:+923131471263" },
+    { icon: MapPin, text: "Karachi, Pakistan",   href: null },
   ];
 
   const fadeUp = (delay = 0) => ({
-    initial: { opacity: 0, y: 16 },
+    initial: { opacity: 0, y: 14 },
     whileInView: { opacity: 1, y: 0 },
     transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] },
     viewport: { once: true },
   });
 
   return (
-    <footer className="bg-gray-50 dark:bg-[#0f0f0f] border-t border-gray-100 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 pt-16 pb-8">
+    <footer className="bg-[#0a0a0a] border-t border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pt-16 pb-8">
 
-        {/* Main grid */}
+        {/* Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
 
           {/* Brand */}
           <motion.div {...fadeUp(0)} className="space-y-5">
-            <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">
-              saim<span className="text-teal-500">.</span>dev
+            <Link to="/" className="text-xl font-bold text-white">
+              saim<span className="text-[#0AFFE8]">.</span>dev
             </Link>
 
-            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="text-sm text-[#666] leading-relaxed">
               Full Stack Developer building clean, fast, and scalable web
               applications. Based in Pakistan, available worldwide.
             </p>
 
-            {/* Social icons */}
-            <div className="flex items-center gap-2 pt-1">
+            <div className="flex items-center gap-1.5 pt-1">
               {social.map(({ icon: Icon, label, url }) => (
                 <a
                   key={label}
@@ -69,7 +68,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="p-2 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
+                  className="p-2 rounded-lg text-[#555] hover:text-white hover:bg-white/[0.06] transition-colors duration-200"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -79,7 +78,7 @@ const Footer = () => {
 
           {/* Quick links */}
           <motion.div {...fadeUp(0.05)}>
-            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">
+            <h4 className="text-[10px] font-semibold text-[#555] uppercase tracking-[0.2em] mb-5">
               Navigation
             </h4>
             <ul className="space-y-2.5">
@@ -87,7 +86,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                    className="text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -98,7 +97,7 @@ const Footer = () => {
 
           {/* Legal */}
           <motion.div {...fadeUp(0.1)}>
-            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">
+            <h4 className="text-[10px] font-semibold text-[#555] uppercase tracking-[0.2em] mb-5">
               Legal
             </h4>
             <ul className="space-y-2.5">
@@ -109,7 +108,7 @@ const Footer = () => {
                       href={link.path}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                      className="inline-flex items-center gap-1 text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
                     >
                       {link.name}
                       <ArrowUpRight className="w-3 h-3" />
@@ -117,7 +116,7 @@ const Footer = () => {
                   ) : (
                     <Link
                       to={link.path}
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                      className="text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -129,7 +128,7 @@ const Footer = () => {
 
           {/* Contact */}
           <motion.div {...fadeUp(0.15)}>
-            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">
+            <h4 className="text-[10px] font-semibold text-[#555] uppercase tracking-[0.2em] mb-5">
               Contact
             </h4>
             <ul className="space-y-3">
@@ -138,13 +137,13 @@ const Footer = () => {
                   {href ? (
                     <a
                       href={href}
-                      className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+                      className="flex items-center gap-3 text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
                     >
                       <Icon className="w-4 h-4 shrink-0" />
                       {text}
                     </a>
                   ) : (
-                    <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center gap-3 text-sm text-[#888]">
                       <Icon className="w-4 h-4 shrink-0" />
                       {text}
                     </div>
@@ -156,22 +155,17 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gray-200 dark:bg-gray-800 mb-6" />
+        <div className="h-px bg-white/[0.06] mb-6" />
 
         {/* Bottom bar */}
         <motion.div
           {...fadeUp(0.2)}
-          className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400"
+          className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#555]"
         >
           <span>© {year} Muhammad Saim. All rights reserved.</span>
-
-          <span className="hidden sm:block">Built with React &amp; Django · Made in Pakistan 🇵🇰</span>
-
-          <a
-            href="#top"
-            className="hover:text-teal-500 transition-colors"
-          >
-            Back to top ↑.
+          <span className="hidden sm:block">Built with React & Django · Made in Pakistan 🇵🇰</span>
+          <a href="#top" className="hover:text-[#0AFFE8] transition-colors">
+            Back to top ↑
           </a>
         </motion.div>
       </div>

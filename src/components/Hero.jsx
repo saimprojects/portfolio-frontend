@@ -1,23 +1,36 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import Typed from "typed.js";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight, Rocket } from "lucide-react";
 
 const Hero = () => {
   const typedRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Scroll-driven transforms — "lock" feel
+  const heroTextY    = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]);
+  const heroOpacity  = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const cardY        = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const cardScale    = useTransform(scrollYProgress, [0, 0.8], [1, 0.92]);
 
   useEffect(() => {
     const typed = new Typed(typedRef.current, {
       strings: [
         "Full Stack Developer",
-        "UI/UX Designer",
+        "React Specialist",
+        "Django Developer",
+        "UI / UX Craftsman",
         "Problem Solver",
-        "Code Craftsman",
       ],
       typeSpeed: 55,
-      backSpeed: 35,
-      backDelay: 1800,
+      backSpeed: 30,
+      backDelay: 2000,
       loop: true,
       showCursor: true,
       cursorChar: "_",
@@ -28,183 +41,225 @@ const Hero = () => {
   const stats = [
     { value: "50+", label: "Projects" },
     { value: "30+", label: "Clients" },
-    { value: "3+", label: "Years" },
+    { value: "3+",  label: "Years" },
     { value: "98%", label: "Success" },
   ];
 
-  const fadeUp = (delay = 0) => ({
-    initial: { opacity: 0, y: 24 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
-  });
-
   return (
-    <section className="relative min-h-screen flex items-center bg-white dark:bg-[#0a0a0a]">
-      {/* Subtle grid background */}
+    <section
+      ref={containerRef}
+      className="relative min-h-screen flex items-center bg-[#0a0a0a] overflow-hidden"
+    >
+      {/* Subtle radial glow top-center */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
+          background:
+            "radial-gradient(ellipse 70% 40% at 50% -5%, rgba(10,255,232,0.07), transparent)",
         }}
       />
-      <div className="absolute inset-0 pointer-events-none dark:hidden"
-        style={{ background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(13,148,136,0.06), transparent)" }}
-      />
-      <div className="absolute inset-0 pointer-events-none hidden dark:block"
-        style={{ background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(13,148,136,0.08), transparent)" }}
+
+      {/* Very subtle grid */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+          backgroundSize: "72px 72px",
+        }}
       />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full py-32">
-        <div className="grid lg:grid-cols-[1fr_400px] gap-20 items-center">
-          {/* Left */}
-          <div>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 w-full py-32 relative z-10">
+        <div className="grid lg:grid-cols-[1fr_420px] gap-16 items-center">
+
+          {/* Left — text block (scroll-driven) */}
+          <motion.div style={{ y: heroTextY, opacity: heroOpacity }}>
             {/* Eyebrow */}
-            <motion.div {...fadeUp(0.1)}>
-              <span className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 dark:text-teal-400 tracking-widest uppercase mb-6">
-                <span className="w-6 h-px bg-teal-500" />
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="inline-flex items-center gap-3 mb-7"
+            >
+              <span className="w-8 h-px bg-[#0AFFE8]" />
+              <span className="text-xs font-semibold tracking-[0.2em] text-[#0AFFE8] uppercase">
                 Available for hire
               </span>
             </motion.div>
 
-            {/* Heading */}
+            {/* Main heading */}
             <motion.h1
-              {...fadeUp(0.2)}
-              className="text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-[1.1] tracking-tight text-gray-900 dark:text-white mb-4"
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="text-[clamp(2.6rem,6vw,5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-white mb-5"
             >
               Hi, I'm{" "}
-              <span className="text-teal-500">Muhammad Saim</span>
+              <span
+                className="relative inline-block"
+                style={{
+                  WebkitTextStroke: "1px #0AFFE8",
+                  color: "transparent",
+                }}
+              >
+                Muhammad Saim
+              </span>
             </motion.h1>
 
-            {/* Typed */}
-            <motion.div {...fadeUp(0.3)} className="mb-6">
-              <span className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 font-light">
-                I specialize in{" "}
-              </span>
+            {/* Typed subtitle */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              className="text-xl md:text-2xl text-[#888] mb-6"
+            >
+              I'm a{" "}
               <span
                 ref={typedRef}
-                className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white"
+                className="font-semibold text-white"
               />
             </motion.div>
 
             {/* Description */}
             <motion.p
-              {...fadeUp(0.4)}
-              className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl mb-10"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.45 }}
+              className="text-[#666] text-lg leading-relaxed max-w-lg mb-10"
             >
-              I craft fast, accessible, and visually refined web applications —
-              from pixel-perfect interfaces to scalable backend systems. Based in
-              Pakistan, working worldwide.
+              I build exceptional digital products — from pixel-perfect interfaces
+              to rock-solid backend systems. Based in Pakistan, serving clients
+              worldwide.
             </motion.p>
 
             {/* CTAs */}
-            <motion.div {...fadeUp(0.5)} className="flex flex-wrap gap-3 mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.55 }}
+              className="flex flex-wrap gap-3 mb-14"
+            >
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-2.5 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#0AFFE8] hover:bg-[#00e6d0] text-[#0a0a0a] text-sm font-bold rounded-xl transition-colors duration-200"
               >
                 View My Work
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2.5 px-6 py-3 bg-transparent border border-gray-200 dark:border-gray-800 hover:border-teal-500 dark:hover:border-teal-500 text-gray-700 dark:text-gray-300 text-sm font-semibold rounded-lg transition-colors duration-200"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 border border-white/10 hover:border-[#0AFFE8]/40 text-white/60 hover:text-white text-sm font-semibold rounded-xl transition-colors duration-200"
               >
                 Get In Touch
               </Link>
             </motion.div>
 
-            {/* Stats */}
+            {/* Stats row */}
             <motion.div
-              {...fadeUp(0.6)}
-              className="grid grid-cols-4 gap-8 pt-8 border-t border-gray-100 dark:border-gray-800"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.65 }}
+              className="grid grid-cols-4 gap-6 pt-8 border-t border-white/[0.06]"
             >
               {stats.map((s, i) => (
                 <div key={i}>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">
+                  <div className="text-2xl font-bold text-white tabular-nums">
                     {s.value}
                   </div>
-                  <div className="text-sm text-gray-400 mt-0.5">{s.label}</div>
+                  <div className="text-xs text-[#666] mt-0.5">{s.label}</div>
                 </div>
               ))}
             </motion.div>
-          </div>
+          </motion.div>
 
-          {/* Right — Code card */}
+          {/* Right — code card (scroll-driven) */}
           <motion.div
+            style={{ y: cardY, scale: cardScale }}
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="relative hidden lg:block"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 bg-[#0d1117] shadow-2xl">
+            {/* Glow behind card */}
+            <div
+              className="absolute -inset-8 rounded-3xl blur-3xl opacity-20 pointer-events-none"
+              style={{ background: "radial-gradient(circle, #0AFFE8, transparent 70%)" }}
+            />
+
+            <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] bg-[#111] shadow-2xl">
               {/* Window bar */}
-              <div className="flex items-center gap-1.5 px-4 py-3 border-b border-gray-800">
+              <div className="flex items-center gap-1.5 px-5 py-3.5 border-b border-white/[0.06]">
                 <div className="w-3 h-3 rounded-full bg-red-500/80" />
                 <div className="w-3 h-3 rounded-full bg-amber-500/80" />
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                <span className="ml-3 text-xs text-gray-500 font-mono">portfolio.jsx</span>
+                <span className="ml-3 text-xs text-[#666] font-mono">developer.config.js</span>
               </div>
 
-              {/* Code */}
-              <div className="p-6 font-mono text-sm leading-7">
+              {/* Code body */}
+              <div className="p-6 font-mono text-sm leading-8">
                 <div>
-                  <span className="text-[#ff7b72]">const</span>{" "}
-                  <span className="text-[#79c0ff]">Developer</span>{" "}
-                  <span className="text-gray-400">= {"{"}</span>
+                  <span className="text-purple-400">const</span>{" "}
+                  <span className="text-[#0AFFE8]">dev</span>{" "}
+                  <span className="text-white/40">= {"{"}</span>
                 </div>
                 {[
-                  { key: "name", val: '"Muhammad Saim"', c: "#a5d6ff" },
-                  { key: "role", val: '"Full Stack Developer"', c: "#a5d6ff" },
-                  { key: "stack", val: '["React", "Django", "Node.js"]', c: "#ffa657" },
-                  { key: "location", val: '"Pakistan 🇵🇰"', c: "#a5d6ff" },
-                  { key: "open", val: "true", c: "#79c0ff" },
-                ].map((line, i) => (
-                  <div key={i} className="ml-6">
-                    <span className="text-[#e3b341]">{line.key}</span>
-                    <span className="text-gray-400">: </span>
-                    <span style={{ color: line.c }}>{line.val}</span>
-                    <span className="text-gray-400">,</span>
+                  { k: "name",     v: '"Muhammad Saim"',            c: "#a5d6ff" },
+                  { k: "title",    v: '"Full Stack Developer"',      c: "#a5d6ff" },
+                  { k: "stack",    v: '["React","Django","Node.js"]',c: "#FFB547" },
+                  { k: "location", v: '"Pakistan 🇵🇰"',              c: "#a5d6ff" },
+                  { k: "years",    v: "3",                           c: "#79c0ff" },
+                  { k: "openToWork", v: "true",                      c: "#0AFFE8" },
+                ].map((line) => (
+                  <div key={line.k} className="ml-6">
+                    <span className="text-[#FFB547]">{line.k}</span>
+                    <span className="text-white/40">: </span>
+                    <span style={{ color: line.c }}>{line.v}</span>
+                    <span className="text-white/40">,</span>
                   </div>
                 ))}
-                <div className="text-gray-400">{"};"}</div>
+                <div className="text-white/40">{"}"}</div>
 
                 {/* Blinking cursor */}
-                <motion.div
+                <motion.span
                   animate={{ opacity: [1, 0, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="mt-4 w-2 h-5 bg-teal-400 inline-block"
+                  transition={{ duration: 1.1, repeat: Infinity }}
+                  className="inline-block mt-3 w-2 h-5 bg-[#0AFFE8]"
                 />
               </div>
             </div>
 
-            {/* Floating badge */}
+            {/* Floating status badge */}
             <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-4 -left-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 shadow-lg"
+              animate={{ y: [0, -7, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -bottom-5 -left-5 flex items-center gap-3 bg-[#111] border border-white/[0.08] rounded-xl px-4 py-3 shadow-xl"
             >
-              <div className="text-xs text-gray-400 mb-0.5">Currently building</div>
-              <div className="text-sm font-semibold text-gray-900 dark:text-white">SaaS Platform</div>
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0AFFE8] opacity-60" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#0AFFE8]" />
+              </span>
+              <div>
+                <div className="text-xs text-[#888]">Status</div>
+                <div className="text-sm font-semibold text-white">Open to Work</div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll line */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-gray-400"
+        transition={{ delay: 1.8 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-px h-10 bg-gradient-to-b from-transparent to-gray-400"
+          animate={{ scaleY: [0, 1, 0], originY: 0 }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-12 bg-gradient-to-b from-[#0AFFE8] to-transparent"
         />
-        <span className="text-xs tracking-widest uppercase">Scroll</span>
+        <span className="text-[10px] tracking-[0.25em] text-[#555] uppercase">Scroll</span>
       </motion.div>
     </section>
   );
