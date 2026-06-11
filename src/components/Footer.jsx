@@ -171,7 +171,7 @@ const Footer = () => {
             href="#top"
             className="hover:text-teal-500 transition-colors"
           >
-            Back to top ↑
+            Back to top ↑.
           </a>
         </motion.div>
       </div>
