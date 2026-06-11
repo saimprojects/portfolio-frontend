@@ -77,63 +77,95 @@ const ProjectCard = ({ project, index, total }) => {
     >
       <div
         className="relative rounded-3xl overflow-hidden border border-white/[0.06] shadow-2xl"
-        style={{ background: color.bg, minHeight: "420px" }}
+        style={{ background: color.bg, minHeight: "460px" }}
       >
-        {/* Index number */}
-        <span
-          className="absolute top-6 left-8 font-mono text-xs tracking-widest opacity-30"
-          style={{ color: color.accent }}
-        >
-          {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-        </span>
-
-        <div className="grid md:grid-cols-2 gap-0 h-full min-h-[420px]">
+        <div className="grid md:grid-cols-[1fr_1fr] gap-0 h-full min-h-[460px]">
           {/* Left — content */}
-          <div className="flex flex-col justify-center p-10 md:p-12">
-            <div className="flex flex-wrap gap-2 mb-5 mt-6">
-              {project.tags?.slice(0, 3).map((tag, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 rounded-full font-mono text-xs"
-                  style={{
-                    background: `${color.accent}15`,
-                    color: color.accent,
-                    border: `1px solid ${color.accent}30`,
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
+          <div className="flex flex-col justify-between p-10 md:p-12">
+
+            {/* Top row: index + year */}
+            <div className="flex items-center justify-between mb-8">
+              <span
+                className="font-mono text-xs tracking-[0.2em] opacity-40"
+                style={{ color: color.accent }}
+              >
+                {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </span>
+              {project.year && (
+                <span className="text-xs font-medium text-[#666]">{project.year}</span>
+              )}
             </div>
 
-            <h3 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
-              {project.title}
-            </h3>
+            {/* Tags */}
+            <div>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {project.tags?.slice(0, 3).map((tag, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1 rounded-full font-mono text-[11px] font-medium"
+                    style={{
+                      background: `${color.accent}12`,
+                      color: color.accent,
+                      border: `1px solid ${color.accent}25`,
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
 
-            <p className="text-[#888] text-base leading-relaxed mb-8">
-              {project.description}
-            </p>
+              <h3 className="text-2xl md:text-3xl font-bold text-white leading-snug mb-4 tracking-tight">
+                {project.title}
+              </h3>
 
-            <div className="flex items-center gap-4">
+              {/* Strip HTML tags from description */}
+              <p className="text-[#777] text-sm leading-relaxed line-clamp-3">
+                {typeof project.description === "string"
+                  ? project.description.replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim()
+                  : project.description}
+              </p>
+            </div>
+
+            {/* Bottom actions */}
+            <div className="flex items-center gap-3 mt-8">
               <Link
                 to={`/project/${project.slug}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-[#0a0a0a] transition-all hover:scale-105"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-[#0a0a0a] hover:opacity-90 transition-opacity"
                 style={{ background: color.accent }}
               >
                 Case Study
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
 
-              <div className="flex gap-2">
-                {[Github, ExternalLink].map((Icon, i) => (
-                  <button
-                    key={i}
-                    className="p-2.5 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
-                  >
-                    <Icon className="w-4 h-4" />
-                  </button>
-                ))}
-              </div>
+              {project.github_url && (
+                <a
+                  href={project.github_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
+                >
+                  <Github className="w-4 h-4" />
+                </a>
+              )}
+              {project.live_url && (
+                <a
+                  href={project.live_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+              {/* Fallback icons if no urls provided */}
+              {!project.github_url && !project.live_url && [Github, ExternalLink].map((Icon, i) => (
+                <button
+                  key={i}
+                  className="p-2.5 rounded-xl border border-white/10 text-white/20 cursor-default"
+                >
+                  <Icon className="w-4 h-4" />
+                </button>
+              ))}
             </div>
           </div>
 
@@ -142,10 +174,15 @@ const ProjectCard = ({ project, index, total }) => {
             <img
               src={project.image}
               alt={project.title}
-              className="absolute inset-0 w-full h-full object-cover opacity-60 hover:opacity-80 transition-opacity duration-500"
+              className="absolute inset-0 w-full h-full object-cover opacity-50 hover:opacity-70 transition-opacity duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[currentColor] to-transparent opacity-80"
-              style={{ color: color.bg }}
+            <div
+              className="absolute inset-0"
+              style={{ background: `linear-gradient(to right, ${color.bg} 0%, ${color.bg}88 25%, transparent 100%)` }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: `linear-gradient(to top, ${color.bg}cc 0%, transparent 55%)` }}
             />
           </div>
         </div>
