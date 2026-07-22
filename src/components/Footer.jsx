@@ -43,7 +43,7 @@ const Footer = () => {
   });
 
   return (
-    <footer className="bg-[#0a0a0a] border-t border-white/[0.06]">
+    <footer className="bg-soft border-t border-ink/[0.07]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pt-16 pb-8">
 
         {/* Grid */}
@@ -51,11 +51,11 @@ const Footer = () => {
 
           {/* Brand */}
           <motion.div {...fadeUp(0)} className="space-y-5">
-            <Link to="/" className="text-xl font-bold text-white">
-              saim<span className="text-[#0AFFE8]">.</span>dev
+            <Link to="/" className="text-xl font-bold text-ink">
+              saim<span className="text-accent">.</span>dev
             </Link>
 
-            <p className="text-sm text-[#666] leading-relaxed">
+            <p className="text-sm text-muted leading-relaxed">
               Full Stack Developer building clean, fast, and scalable web
               applications. Based in Pakistan, available worldwide.
             </p>
@@ -68,7 +68,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="p-2 rounded-lg text-[#555] hover:text-white hover:bg-white/[0.06] transition-colors duration-200"
+                  className="p-2 rounded-lg text-faint hover:text-ink hover:bg-ink/[0.06] transition-colors duration-200"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -78,7 +78,7 @@ const Footer = () => {
 
           {/* Quick links */}
           <motion.div {...fadeUp(0.05)}>
-            <h4 className="text-[10px] font-semibold text-[#555] uppercase tracking-[0.2em] mb-5">
+            <h4 className="text-[10px] font-semibold text-faint uppercase tracking-[0.2em] mb-5">
               Navigation
             </h4>
             <ul className="space-y-2.5">
@@ -86,7 +86,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
+                    className="text-sm text-muted hover:text-accent transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -97,7 +97,7 @@ const Footer = () => {
 
           {/* Legal */}
           <motion.div {...fadeUp(0.1)}>
-            <h4 className="text-[10px] font-semibold text-[#555] uppercase tracking-[0.2em] mb-5">
+            <h4 className="text-[10px] font-semibold text-faint uppercase tracking-[0.2em] mb-5">
               Legal
             </h4>
             <ul className="space-y-2.5">
@@ -108,7 +108,7 @@ const Footer = () => {
                       href={link.path}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
+                      className="inline-flex items-center gap-1 text-sm text-muted hover:text-accent transition-colors"
                     >
                       {link.name}
                       <ArrowUpRight className="w-3 h-3" />
@@ -116,7 +116,7 @@ const Footer = () => {
                   ) : (
                     <Link
                       to={link.path}
-                      className="text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
+                      className="text-sm text-muted hover:text-accent transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -128,7 +128,7 @@ const Footer = () => {
 
           {/* Contact */}
           <motion.div {...fadeUp(0.15)}>
-            <h4 className="text-[10px] font-semibold text-[#555] uppercase tracking-[0.2em] mb-5">
+            <h4 className="text-[10px] font-semibold text-faint uppercase tracking-[0.2em] mb-5">
               Contact
             </h4>
             <ul className="space-y-3">
@@ -137,13 +137,13 @@ const Footer = () => {
                   {href ? (
                     <a
                       href={href}
-                      className="flex items-center gap-3 text-sm text-[#888] hover:text-[#0AFFE8] transition-colors"
+                      className="flex items-center gap-3 text-sm text-muted hover:text-accent transition-colors"
                     >
                       <Icon className="w-4 h-4 shrink-0" />
                       {text}
                     </a>
                   ) : (
-                    <div className="flex items-center gap-3 text-sm text-[#888]">
+                    <div className="flex items-center gap-3 text-sm text-muted">
                       <Icon className="w-4 h-4 shrink-0" />
                       {text}
                     </div>
@@ -155,16 +155,16 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-white/[0.06] mb-6" />
+        <div className="h-px bg-ink/[0.07] mb-6" />
 
         {/* Bottom bar */}
         <motion.div
           {...fadeUp(0.2)}
-          className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#555]"
+          className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-faint"
         >
           <span>© {year} Muhammad Saim. All rights reserved.</span>
           <span className="hidden sm:block">Built with React & Django · Made in Pakistan 🇵🇰</span>
-          <a href="#top" className="hover:text-[#0AFFE8] transition-colors">
+          <a href="#top" className="hover:text-accent transition-colors">
             Back to top ↑
           </a>
         </motion.div>

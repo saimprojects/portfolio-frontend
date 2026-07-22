@@ -2,55 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Home Page -->
   <url>
-    <loc>https://www.meetsaim.online/</loc>
+    <loc>https://www.saimat.work/</loc>
     <priority>1.0</priority>
   </url>
 
   <!-- Projects Page -->
   <url>
-    <loc>https://www.meetsaim.online/projects</loc>
+    <loc>https://www.saimat.work/projects</loc>
     <priority>0.9</priority>
   </url>
 
   <!-- Blogs Page -->
   <url>
-    <loc>https://www.meetsaim.online/blogs</loc>
+    <loc>https://www.saimat.work/blogs</loc>
     <priority>0.9</priority>
   </url>
 
   <!-- Services Page -->
   <url>
-    <loc>https://www.meetsaim.online/services</loc>
+    <loc>https://www.saimat.work/services</loc>
     <priority>0.8</priority>
   </url>
 
   <!-- Contact Page -->
   <url>
-    <loc>https://www.meetsaim.online/contact</loc>
+    <loc>https://www.saimat.work/contact</loc>
     <priority>0.7</priority>
   </url>
 
   <!-- Privacy Policy Page -->
   <url>
-    <loc>https://www.meetsaim.online/privacy-policy</loc>
+    <loc>https://www.saimat.work/privacy-policy</loc>
     <priority>0.6</priority>
   </url>
 
   <!-- Return & Refund Policy Page -->
   <url>
-    <loc>https://www.meetsaim.online/return-refund-policy</loc>
+    <loc>https://www.saimat.work/return-refund-policy</loc>
     <priority>0.6</priority>
   </url>
 
   <!-- Shipping Policy Page -->
   <url>
-    <loc>https://www.meetsaim.online/shipping-policy</loc>
+    <loc>https://www.saimat.work/shipping-policy</loc>
     <priority>0.6</priority>
   </url>
 
   <!-- Terms and Conditions Page -->
   <url>
-    <loc>https://www.meetsaim.online/terms-and-conditions</loc>
+    <loc>https://www.saimat.work/terms-and-conditions</loc>
     <priority>0.6</priority>
   </url>
 </urlset>

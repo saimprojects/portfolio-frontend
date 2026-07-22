@@ -1,11 +1,11 @@
 import Hero from "../components/Hero";
 import About from "../components/About";
-import Skills from "../components/Skills";
 import { useEffect, useRef, useState } from "react";
 import API from "../api";
-import { motion, useScroll, useTransform, useInView, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Github, ExternalLink, ArrowUpRight } from "lucide-react";
+import useSEO from "../hooks/useSEO";
 
 /* ─────────────────────────────────────────────
    MARQUEE TICKER
@@ -24,7 +24,7 @@ const Ticker = () => {
   const repeated = [...items, ...items, ...items];
 
   return (
-    <div className="relative overflow-hidden bg-[#0AFFE8] py-3 -rotate-[0.5deg] scale-105">
+    <div className="relative overflow-hidden bg-accent py-3 -rotate-[0.5deg] scale-105">
       <motion.div
         className="flex gap-8 whitespace-nowrap"
         animate={{ x: ["0%", "-33.33%"] }}
@@ -33,7 +33,7 @@ const Ticker = () => {
         {repeated.map((item, i) => (
           <span
             key={i}
-            className="text-[#0a0a0a] text-sm font-bold tracking-widest uppercase shrink-0"
+            className="text-accent-ink text-sm font-bold tracking-widest uppercase shrink-0"
           >
             {item}
             <span className="mx-4 opacity-40">◆</span>
@@ -42,6 +42,21 @@ const Ticker = () => {
       </motion.div>
     </div>
   );
+};
+
+/* ─────────────────────────────────────────────
+   STRIP HTML (CKEditor descriptions)
+───────────────────────────────────────────── */
+const stripHtml = (html) => {
+  if (typeof html !== "string") return html || "";
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/\s+/g, " ")
+    .trim();
 };
 
 /* ─────────────────────────────────────────────
@@ -54,20 +69,9 @@ const ProjectCard = ({ project, index, total }) => {
     offset: ["start end", "end start"],
   });
 
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [0.95, 1, 0.92]
-  );
+  const scale   = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.92]);
   const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.6]);
-  const y = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
-
-  const colors = [
-    { bg: "#111827", accent: "#0AFFE8" },
-    { bg: "#1a0a2e", accent: "#FFB547" },
-    { bg: "#0a1a0a", accent: "#0AFFE8" },
-  ];
-  const color = colors[index % colors.length];
+  const y       = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
 
   return (
     <motion.div
@@ -75,24 +79,18 @@ const ProjectCard = ({ project, index, total }) => {
       style={{ scale, opacity, y }}
       className="sticky top-24 mb-6"
     >
-      <div
-        className="relative rounded-3xl overflow-hidden border border-white/[0.06] shadow-2xl"
-        style={{ background: color.bg, minHeight: "460px" }}
-      >
+      <div className="relative rounded-3xl overflow-hidden border border-ink/[0.08] bg-card shadow-2xl min-h-[460px]">
         <div className="grid md:grid-cols-[1fr_1fr] gap-0 h-full min-h-[460px]">
           {/* Left — content */}
           <div className="flex flex-col justify-between p-10 md:p-12">
 
-            {/* Top row: index + year */}
+            {/* Top row: index */}
             <div className="flex items-center justify-between mb-8">
-              <span
-                className="font-mono text-xs tracking-[0.2em] opacity-40"
-                style={{ color: color.accent }}
-              >
+              <span className="font-mono text-xs tracking-[0.2em] text-accent opacity-60">
                 {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
               </span>
               {project.year && (
-                <span className="text-xs font-medium text-[#666]">{project.year}</span>
+                <span className="text-xs font-medium text-faint">{project.year}</span>
               )}
             </div>
 
@@ -102,27 +100,19 @@ const ProjectCard = ({ project, index, total }) => {
                 {project.tags?.slice(0, 3).map((tag, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1 rounded-full font-mono text-[11px] font-medium"
-                    style={{
-                      background: `${color.accent}12`,
-                      color: color.accent,
-                      border: `1px solid ${color.accent}25`,
-                    }}
+                    className="px-3 py-1 rounded-full font-mono text-[11px] font-medium bg-accent/10 text-accent border border-accent/25"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-bold text-white leading-snug mb-4 tracking-tight">
+              <h3 className="text-2xl md:text-3xl font-bold text-ink leading-snug mb-4 tracking-tight">
                 {project.title}
               </h3>
 
-              {/* Strip HTML tags from description */}
-              <p className="text-[#777] text-sm leading-relaxed line-clamp-3">
-                {typeof project.description === "string"
-                  ? project.description.replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim()
-                  : project.description}
+              <p className="text-muted text-sm leading-relaxed line-clamp-3">
+                {stripHtml(project.description)}
               </p>
             </div>
 
@@ -130,59 +120,51 @@ const ProjectCard = ({ project, index, total }) => {
             <div className="flex items-center gap-3 mt-8">
               <Link
                 to={`/project/${project.slug}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-[#0a0a0a] hover:opacity-90 transition-opacity"
-                style={{ background: color.accent }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-accent text-accent-ink hover:opacity-90 transition-opacity"
               >
                 Case Study
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
 
-              {project.github_url && (
+              {(project.github_url || project.github_link) && (
                 <a
-                  href={project.github_url}
+                  href={project.github_url || project.github_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
+                  aria-label="GitHub"
+                  className="p-2.5 rounded-xl border border-ink/10 text-muted hover:text-ink hover:border-ink/30 transition-colors"
                 >
                   <Github className="w-4 h-4" />
                 </a>
               )}
-              {project.live_url && (
+              {(project.live_url || project.live_link) && (
                 <a
-                  href={project.live_url}
+                  href={project.live_url || project.live_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
+                  aria-label="Live demo"
+                  className="p-2.5 rounded-xl border border-ink/10 text-muted hover:text-ink hover:border-ink/30 transition-colors"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>
               )}
-              {/* Fallback icons if no urls provided */}
-              {!project.github_url && !project.live_url && [Github, ExternalLink].map((Icon, i) => (
-                <button
-                  key={i}
-                  className="p-2.5 rounded-xl border border-white/10 text-white/20 cursor-default"
-                >
-                  <Icon className="w-4 h-4" />
-                </button>
-              ))}
             </div>
           </div>
 
           {/* Right — image */}
-          <div className="relative overflow-hidden rounded-r-3xl hidden md:block">
+          <div className="relative overflow-hidden hidden md:block">
             <img
               src={project.image}
               alt={project.title}
-              className="absolute inset-0 w-full h-full object-cover opacity-50 hover:opacity-70 transition-opacity duration-500"
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
             />
             <div
               className="absolute inset-0"
-              style={{ background: `linear-gradient(to right, ${color.bg} 0%, ${color.bg}88 25%, transparent 100%)` }}
-            />
-            <div
-              className="absolute inset-0"
-              style={{ background: `linear-gradient(to top, ${color.bg}cc 0%, transparent 55%)` }}
+              style={{
+                background:
+                  "linear-gradient(to right, rgb(var(--card)) 0%, rgb(var(--card) / 0.5) 25%, transparent 100%)",
+              }}
             />
           </div>
         </div>
@@ -197,10 +179,10 @@ const ProjectCard = ({ project, index, total }) => {
 const SkillsBento = ({ skills }) => {
   const groups = [
     { label: "Frontend", icon: "⚡", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"], span: "md:col-span-2" },
-    { label: "Backend", icon: "⚙️", items: ["Django", "Python", "Node.js", "Express"], span: "" },
+    { label: "Backend",  icon: "⚙️", items: ["Django", "Python", "Node.js", "Express"], span: "" },
     { label: "Database", icon: "🗄️", items: ["PostgreSQL", "MongoDB", "MySQL"], span: "" },
-    { label: "Tools", icon: "🔧", items: ["Git", "Docker", "AWS", "Figma"], span: "" },
-    { label: "Mobile", icon: "📱", items: ["React Native", "Expo"], span: "" },
+    { label: "Tools",    icon: "🔧", items: ["Git", "Docker", "AWS", "Figma"], span: "" },
+    { label: "Mobile",   icon: "📱", items: ["React Native", "Expo"], span: "" },
   ];
 
   return (
@@ -212,25 +194,27 @@ const SkillsBento = ({ skills }) => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true }}
-          className={`${group.span} rounded-2xl border border-white/[0.06] bg-[#111] p-6 hover:border-[#0AFFE8]/20 transition-colors duration-300`}
+          className={`${group.span} rounded-2xl border border-ink/[0.07] bg-card p-6 hover:border-accent/30 transition-colors duration-300`}
         >
           <div className="flex items-center gap-2 mb-4">
             <span className="text-xl">{group.icon}</span>
-            <span className="text-xs font-semibold tracking-widest text-[#888] uppercase">
+            <span className="text-xs font-semibold tracking-widest text-muted uppercase">
               {group.label}
             </span>
           </div>
           <div className="flex flex-wrap gap-2">
             {group.items.map((item) => {
-              const skill = skills.find((s) => s.name === item || s.name?.includes(item.split(" ")[0]));
+              const skill = skills.find(
+                (s) => s.name === item || s.name?.includes(item.split(" ")[0])
+              );
               return (
                 <span
                   key={item}
-                  className="px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-sm text-white/70 font-medium hover:bg-[#0AFFE8]/10 hover:text-[#0AFFE8] hover:border-[#0AFFE8]/20 transition-colors duration-200 cursor-default"
+                  className="px-3 py-1.5 rounded-lg bg-ink/[0.04] border border-ink/[0.07] text-sm text-ink/70 font-medium hover:bg-accent/10 hover:text-accent hover:border-accent/25 transition-colors duration-200 cursor-default"
                 >
                   {item}
                   {skill && (
-                    <span className="ml-2 text-xs font-mono text-[#0AFFE8]/50">
+                    <span className="ml-2 text-xs font-mono text-accent/60">
                       {skill.proficiency}%
                     </span>
                   )}
@@ -261,12 +245,13 @@ const ShowcaseMarquee = ({ images }) => {
         {[...items, ...items].map((img, i) => (
           <div
             key={i}
-            className="w-64 h-44 rounded-2xl overflow-hidden shrink-0 border border-white/[0.06]"
+            className="w-64 h-44 rounded-2xl overflow-hidden shrink-0 border border-ink/[0.07]"
           >
             <img
               src={img.image}
               alt={img.title}
-              className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity duration-300"
+              loading="lazy"
+              className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-300"
             />
           </div>
         ))}
@@ -293,8 +278,8 @@ const SectionLabel = ({ children }) => (
     viewport={{ once: true }}
     className="inline-flex items-center gap-3 mb-4"
   >
-    <span className="w-8 h-px bg-[#0AFFE8]" />
-    <span className="text-xs font-semibold tracking-[0.2em] text-[#0AFFE8] uppercase">
+    <span className="w-8 h-px bg-accent" />
+    <span className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
       {children}
     </span>
   </motion.div>
@@ -306,6 +291,13 @@ const SectionLabel = ({ children }) => (
 const Home = () => {
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
+
+  useSEO({
+    title: "Home",
+    description:
+      "Muhammad Saim — Full Stack Developer specializing in React and Django. Building clean, fast, scalable web applications. Available for hire worldwide.",
+    path: "/",
+  });
 
   // CTA scroll text scale
   const ctaRef = useRef(null);
@@ -323,9 +315,9 @@ const Home = () => {
           API.getProjects("?limit=3"),
           API.getSkills(),
         ]);
-        const pData = Array.isArray(pRes) ? pRes : pRes?.data || pRes?.projects || getFallbackProjects();
+        const pData = Array.isArray(pRes) ? pRes : pRes?.data || pRes?.projects || [];
         const sData = Array.isArray(sRes) ? sRes : sRes?.data || sRes?.skills || [];
-        setProjects(pData.length ? pData : getFallbackProjects());
+        setProjects((pData.length ? pData : getFallbackProjects()).slice(0, 3));
         setSkills(sData.length ? sData : getFallbackSkills());
       } catch {
         setProjects(getFallbackProjects());
@@ -389,7 +381,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="bg-[#0a0a0a] text-white overflow-x-hidden">
+    <div className="bg-base text-ink overflow-x-hidden">
       {/* ── Hero ─────────────────────────────── */}
       <Hero />
 
@@ -402,7 +394,7 @@ const Home = () => {
       <About />
 
       {/* ── Skills Bento ─────────────────────── */}
-      <section className="py-24 px-6 md:px-12 lg:px-20">
+      <section className="py-24 px-6 md:px-12 lg:px-20 bg-soft">
         <div className="max-w-7xl mx-auto">
           <SectionLabel>Expertise</SectionLabel>
           <motion.h2
@@ -410,7 +402,7 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight"
+            className="text-4xl md:text-5xl font-bold text-ink mb-4 tracking-tight"
           >
             Technologies I work with
           </motion.h2>
@@ -419,7 +411,7 @@ const Home = () => {
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-[#888] text-lg mb-12 max-w-xl"
+            className="text-muted text-lg mb-12 max-w-xl"
           >
             From pixel-perfect frontends to scalable backend systems — here's my full stack.
           </motion.p>
@@ -428,7 +420,7 @@ const Home = () => {
       </section>
 
       {/* ── Projects — Stacked Scroll ─────────── */}
-      <section className="py-24 px-6 md:px-12 lg:px-20 bg-[#0d0d0d]">
+      <section className="py-24 px-6 md:px-12 lg:px-20 bg-base">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-end justify-between mb-16">
             <div>
@@ -438,7 +430,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                className="text-4xl md:text-5xl font-bold text-white tracking-tight"
+                className="text-4xl md:text-5xl font-bold text-ink tracking-tight"
               >
                 Featured projects
               </motion.h2>
@@ -450,7 +442,7 @@ const Home = () => {
             >
               <Link
                 to="/projects"
-                className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-[#888] hover:text-[#0AFFE8] transition-colors"
+                className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-accent transition-colors"
               >
                 All projects <ArrowUpRight className="w-4 h-4" />
               </Link>
@@ -465,7 +457,7 @@ const Home = () => {
           </div>
 
           <div className="sm:hidden mt-6 text-center">
-            <Link to="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-[#0AFFE8]">
+            <Link to="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-accent">
               All projects <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -473,7 +465,7 @@ const Home = () => {
       </section>
 
       {/* ── Showcase Marquee ─────────────────── */}
-      <section className="py-16 bg-[#0a0a0a] overflow-hidden">
+      <section className="py-16 bg-soft overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-8">
           <SectionLabel>Design Gallery</SectionLabel>
           <motion.h2
@@ -481,7 +473,7 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-white tracking-tight"
+            className="text-4xl md:text-5xl font-bold text-ink tracking-tight"
           >
             A taste of the work
           </motion.h2>
@@ -492,35 +484,35 @@ const Home = () => {
       {/* ── CTA — Scroll Scale ────────────────── */}
       <section
         ref={ctaRef}
-        className="py-32 px-6 md:px-12 lg:px-20 bg-[#0d0d0d] overflow-hidden"
+        className="py-32 px-6 md:px-12 lg:px-20 bg-base overflow-hidden"
       >
         <div className="max-w-5xl mx-auto">
           <motion.div style={{ scale: ctaScale, opacity: ctaOpacity }}>
-            <p className="text-xs font-semibold tracking-[0.25em] text-[#0AFFE8] uppercase mb-6">
+            <p className="text-xs font-semibold tracking-[0.25em] text-accent uppercase mb-6">
               Open to opportunities
             </p>
-            <h2 className="text-[clamp(3rem,9vw,7rem)] font-bold leading-[0.95] tracking-tight text-white mb-8">
+            <h2 className="text-[clamp(3rem,9vw,7rem)] font-bold leading-[0.95] tracking-tight text-ink mb-8">
               Let's build
               <br />
-              <span className="text-[#0AFFE8]">something</span>
+              <span className="text-accent">something</span>
               <br />
               together.
             </h2>
-            <p className="text-[#888] text-lg max-w-lg mb-10 leading-relaxed">
+            <p className="text-muted text-lg max-w-lg mb-10 leading-relaxed">
               Whether it's a startup MVP, a design system, or a full-scale
               application — I'm ready to bring your vision to life.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#0AFFE8] hover:bg-[#00e6d0] text-[#0a0a0a] text-sm font-bold rounded-xl transition-colors duration-200"
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-accent hover:opacity-90 text-accent-ink text-sm font-bold rounded-xl transition-opacity duration-200"
               >
                 Start a conversation
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/projects"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/10 hover:border-[#0AFFE8]/40 text-white/60 hover:text-white text-sm font-semibold rounded-xl transition-colors duration-200"
+                className="inline-flex items-center justify-center px-8 py-4 border border-ink/10 hover:border-accent/50 text-muted hover:text-ink text-sm font-semibold rounded-xl transition-colors duration-200"
               >
                 Browse projects
               </Link>

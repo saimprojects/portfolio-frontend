@@ -37,7 +37,7 @@ const Navbar = () => {
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/[0.06]"
+          ? "bg-base/85 backdrop-blur-md border-b border-ink/[0.07] shadow-sm"
           : "bg-transparent"
       }`}
     >
@@ -47,9 +47,9 @@ const Navbar = () => {
           {/* Logo */}
           <button
             onClick={() => navigate("/")}
-            className="text-base font-bold tracking-tight text-white hover:text-[#0AFFE8] transition-colors"
+            className="text-base font-bold tracking-tight text-ink hover:text-accent transition-colors"
           >
-            saim<span className="text-[#0AFFE8]">.</span>dev
+            saim<span className="text-accent">.</span>dev
           </button>
 
           {/* Desktop nav */}
@@ -60,15 +60,15 @@ const Navbar = () => {
                 to={item.path}
                 className={`relative text-sm font-medium py-1 transition-colors duration-200 ${
                   isActive(item.path)
-                    ? "text-white"
-                    : "text-[#888] hover:text-white"
+                    ? "text-ink"
+                    : "text-muted hover:text-ink"
                 }`}
               >
                 {item.name}
                 {isActive(item.path) && (
                   <motion.div
                     layoutId="nav-underline"
-                    className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#0AFFE8]"
+                    className="absolute -bottom-0.5 left-0 right-0 h-px bg-accent"
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 )}
@@ -81,14 +81,25 @@ const Navbar = () => {
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 rounded-lg text-[#666] hover:text-white hover:bg-white/[0.06] transition-colors"
+              className="relative p-2 rounded-lg text-muted hover:text-ink hover:bg-ink/[0.06] transition-colors overflow-hidden"
             >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={darkMode ? "sun" : "moon"}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="block"
+                >
+                  {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </motion.span>
+              </AnimatePresence>
             </button>
 
             <Link
               to="/contact"
-              className="px-4 py-2 bg-[#0AFFE8] hover:bg-[#00e6d0] text-[#0a0a0a] text-sm font-bold rounded-lg transition-colors duration-200"
+              className="px-4 py-2 bg-accent hover:opacity-90 text-accent-ink text-sm font-bold rounded-lg transition-opacity duration-200"
             >
               Hire Me
             </Link>
@@ -98,13 +109,15 @@ const Navbar = () => {
           <div className="md:hidden flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-[#666] hover:text-white hover:bg-white/[0.06] transition-colors"
+              aria-label="Toggle theme"
+              className="p-2 rounded-lg text-muted hover:text-ink hover:bg-ink/[0.06] transition-colors"
             >
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-[#888] hover:text-white hover:bg-white/[0.06] transition-colors"
+              aria-label="Toggle menu"
+              className="p-2 rounded-lg text-muted hover:text-ink hover:bg-ink/[0.06] transition-colors"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -120,7 +133,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden overflow-hidden bg-[#0a0a0a] border-b border-white/[0.06]"
+            className="md:hidden overflow-hidden bg-base border-b border-ink/[0.07]"
           >
             <div className="px-6 py-4 space-y-1">
               {navItems.map((item, i) => (
@@ -134,13 +147,13 @@ const Navbar = () => {
                     to={item.path}
                     className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       isActive(item.path)
-                        ? "bg-[#0AFFE8]/10 text-[#0AFFE8]"
-                        : "text-[#888] hover:bg-white/[0.04] hover:text-white"
+                        ? "bg-accent/10 text-accent"
+                        : "text-muted hover:bg-ink/[0.04] hover:text-ink"
                     }`}
                   >
                     {item.name}
                     {isActive(item.path) && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#0AFFE8]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                     )}
                   </Link>
                 </motion.div>
@@ -149,7 +162,7 @@ const Navbar = () => {
               <div className="pt-3 pb-1">
                 <Link
                   to="/contact"
-                  className="block w-full text-center px-4 py-2.5 bg-[#0AFFE8] hover:bg-[#00e6d0] text-[#0a0a0a] text-sm font-bold rounded-lg transition-colors"
+                  className="block w-full text-center px-4 py-2.5 bg-accent hover:opacity-90 text-accent-ink text-sm font-bold rounded-lg transition-opacity"
                 >
                   Hire Me
                 </Link>

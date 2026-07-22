@@ -1,406 +1,256 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import API from "../api";
 import toast from "react-hot-toast";
-import Tilt from "react-parallax-tilt";
 import {
   Code,
-  Palette,
-  Smartphone,
-  Server,
-  Database,
-  Cloud,
-  Shield,
-  Zap,
-  Sparkles,
   CheckCircle,
   ArrowRight,
-  Target,
-  Users,
-  Clock,
-  Award,
-  TrendingUp
+  Sparkles,
 } from "lucide-react";
+import useSEO from "../hooks/useSEO";
+
+const SectionLabel = ({ children }) => (
+  <div className="inline-flex items-center gap-3 mb-4">
+    <span className="w-8 h-px bg-accent" />
+    <span className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+      {children}
+    </span>
+  </div>
+);
 
 const Services = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [hoveredService, setHoveredService] = useState(null);
-  const { scrollYProgress } = useScroll();
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const navigate = useNavigate();
 
-  const serviceIcons = {
-    web: <Code className="w-6 h-6" />,
-    design: <Palette className="w-6 h-6" />,
-    mobile: <Smartphone className="w-6 h-6" />,
-    backend: <Server className="w-6 h-6" />,
-    database: <Database className="w-6 h-6" />,
-    cloud: <Cloud className="w-6 h-6" />,
-    security: <Shield className="w-6 h-6" />,
-    performance: <Zap className="w-6 h-6" />,
-  };
-
-  const handleGetStartedClick = () => {
-    navigate("/contact");
-  };
+  useSEO({
+    title: "Services",
+    description:
+      "Web development services by Muhammad Saim — full stack applications, frontends, APIs, and more. From concept to deployment.",
+    path: "/services",
+  });
 
   useEffect(() => {
-    const fetchServices = async () => {
+    (async () => {
       try {
         const response = await API.getServices();
-        setServices(response.data);
+        const data = Array.isArray(response.data)
+          ? response.data
+          : response.data?.results || [];
+        setServices(data);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load services.");
       } finally {
         setLoading(false);
       }
-    };
-    fetchServices();
+    })();
   }, []);
 
-  const ServiceSkeleton = () => (
-    <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-800/50 animate-pulse">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-12 h-12 bg-gray-300 dark:bg-gray-700 rounded-xl" />
-        <div>
-          <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-32 mb-2" />
-          <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-24" />
-        </div>
-      </div>
-      <div className="space-y-3">
+  const stats = [
+    { value: "50+", label: "Projects completed" },
+    { value: "30+", label: "Happy clients" },
+    { value: "24/7", label: "Support" },
+    { value: "98%", label: "Success rate" },
+  ];
+
+  const process = [
+    { step: "01", title: "Discovery",   description: "Understand your requirements and goals" },
+    { step: "02", title: "Planning",    description: "Create roadmap and design architecture" },
+    { step: "03", title: "Development", description: "Build with modern technologies and best practices" },
+    { step: "04", title: "Delivery",    description: "Launch, support, and maintenance" },
+  ];
+
+  const Skeleton = () => (
+    <div className="rounded-2xl bg-card border border-ink/[0.07] p-6 animate-pulse">
+      <div className="h-6 bg-ink/10 rounded w-1/2 mb-6" />
+      <div className="space-y-3 mb-6">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-4 bg-gray-200 dark:bg-gray-600 rounded" />
+          <div key={i} className="h-4 bg-ink/[0.06] rounded" />
         ))}
       </div>
-      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-        <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded-full" />
-      </div>
+      <div className="h-10 bg-ink/10 rounded-xl" />
     </div>
   );
 
-  const serviceStats = [
-    { icon: <Target className="w-5 h-5" />, label: "Projects Completed", value: "50+" },
-    { icon: <Users className="w-5 h-5" />, label: "Happy Clients", value: "30+" },
-    { icon: <Clock className="w-5 h-5" />, label: "Support Hours", value: "24/7" },
-    { icon: <Award className="w-5 h-5" />, label: "Awards", value: "10+" },
-    { icon: <TrendingUp className="w-5 h-5" />, label: "Success Rate", value: "98%" },
-  ];
-
   return (
-    <div className="font-inter bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-black text-gray-900 dark:text-white relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+    <div className="min-h-screen bg-base pt-28 pb-24 px-6 md:px-12 lg:px-20">
+      <div className="max-w-6xl mx-auto">
+
+        {/* ── Header ── */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-14"
+        >
+          <SectionLabel>Services</SectionLabel>
+          <h1 className="text-4xl md:text-6xl font-bold text-ink tracking-tight mb-4">
+            What I can do
+            <br />
+            <span className="text-accent">for you.</span>
+          </h1>
+          <p className="text-muted text-lg max-w-xl">
+            From concept to deployment — end-to-end digital solutions that
+            transform ideas into high-performance applications.
+          </p>
+        </motion.div>
+
+        {/* ── Stats row ── */}
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-amber-500/10 to-pink-500/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-      </div>
-
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-amber-500/5"
-        style={{ y: backgroundY }}
-      />
-
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-12 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-500/10 to-amber-500/10 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                Premium Services
-              </span>
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.5 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16"
+        >
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="p-6 rounded-2xl bg-card border border-ink/[0.07] hover:border-accent/30 transition-colors"
+            >
+              <div className="text-3xl font-bold text-ink tabular-nums mb-1">{s.value}</div>
+              <div className="text-sm text-muted">{s.label}</div>
             </div>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500 bg-clip-text text-transparent">
-                Services
-              </span>{" "}
-              That Drive Success
-            </h1>
-            
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-12">
-              From concept to deployment, I provide end-to-end digital solutions that 
-              transform ideas into impactful, high-performance applications.
-            </p>
+          ))}
+        </motion.div>
 
-            {/* Stats */}
-            <div className="flex flex-wrap justify-center gap-8 mb-12">
-              {serviceStats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center"
-                >
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <div className="text-teal-500 dark:text-teal-400">
-                      {stat.icon}
-                    </div>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                      {stat.value}
-                    </div>
+        {/* ── Services grid ── */}
+        {loading ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} />
+            ))}
+          </div>
+        ) : services.length === 0 ? (
+          <div className="text-center py-20">
+            <Sparkles className="w-12 h-12 text-faint mx-auto mb-6" />
+            <h3 className="text-2xl font-bold text-ink mb-3">No services available</h3>
+            <p className="text-muted">Services will be updated soon. Please check back later.</p>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service, index) => (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+                className="group flex flex-col rounded-2xl bg-card border border-ink/[0.07] hover:border-accent/40 p-7 transition-colors duration-300"
+              >
+                {/* Icon + title */}
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="p-3 rounded-xl bg-accent/10 border border-accent/25 text-accent">
+                    <Code className="w-5 h-5" />
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Services Grid */}
-          {loading ? (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {[...Array(6)].map((_, i) => (
-                <ServiceSkeleton key={i} />
-              ))}
-            </div>
-          ) : services.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 flex items-center justify-center">
-                <Sparkles className="w-12 h-12 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                No Services Available
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Services will be updated soon. Please check back later.
-              </p>
-            </div>
-          ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {services.map((service, index) => (
-                <Tilt
-                  key={service.id}
-                  tiltMaxAngleX={8}
-                  tiltMaxAngleY={8}
-                  perspective={1000}
-                  scale={1.02}
-                  transitionSpeed={800}
-                  glareEnable={true}
-                  glareMaxOpacity={0.1}
-                  className="w-full"
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    onMouseEnter={() => setHoveredService(index)}
-                    onMouseLeave={() => setHoveredService(null)}
-                    className="group relative h-full rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl overflow-hidden border border-gray-200/50 dark:border-gray-800/50 shadow-lg hover:shadow-2xl transition-all duration-500"
-                  >
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-transparent to-teal-500/0 group-hover:to-teal-500/10 transition-all duration-500" />
-                    
-                    {/* Service Header */}
-                    <div className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-4">
-                          <div className="p-3 rounded-xl bg-gradient-to-br from-teal-500/10 to-amber-500/10 group-hover:from-teal-500/20 group-hover:to-amber-500/20 transition-colors">
-                            {serviceIcons[service.icon] || <Code className="w-6 h-6" />}
-                          </div>
-                          <div>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors">
-                              {service.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              {service.category || "Professional Service"}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        {/* Popular Badge */}
-                        {service.popular && (
-                          <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-amber-500 to-pink-500 text-white text-xs font-semibold rounded-full">
-                            <Sparkles className="w-3 h-3" />
-                            Popular
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-gray-600 dark:text-gray-400 mb-6">
-                        {service.description}
-                      </p>
-
-                      {/* Features List */}
-                      <div className="space-y-3 mb-6">
-                        {(service.features ? service.features.split("<br>") : ["No features available"])
-                          .filter(feature => feature.trim())
-                          .slice(0, 4)
-                          .map((feature, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                              <CheckCircle className="w-4 h-4 text-teal-500 flex-shrink-0" />
-                              <span className="text-sm text-gray-700 dark:text-gray-300">
-                                {feature.trim()}
-                              </span>
-                            </div>
-                          ))}
-                      </div>
-
-                      {/* Pricing & Action */}
-                      <div className="pt-6 border-t border-gray-200 dark:border-gray-800">
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                              {service.price || "Custom"}
-                            </span>
-                            {service.duration && (
-                              <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
-                                / {service.duration}
-                              </span>
-                            )}
-                          </div>
-                          
-                          {/* Delivery Time */}
-                          {service.delivery && (
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
-                              ⏱️ {service.delivery}
-                            </span>
-                          )}
-                        </div>
-
-                        <motion.button
-                          className="w-full group/btn flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-500 to-amber-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-teal-500/25 transition-all duration-300"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={handleGetStartedClick}
-                        >
-                          <span>Get Started</span>
-                          <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                        </motion.button>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Tilt>
-              ))}
-            </div>
-          )}
-
-          {/* CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mt-24"
-          >
-            <div className="relative rounded-3xl overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 via-amber-500 to-purple-500 animate-gradient-x" />
-              <div className="relative bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm p-12">
-                <div className="text-center">
-                  <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                    Ready to Transform Your Ideas?
+                  <h3 className="text-lg font-bold text-ink group-hover:text-accent transition-colors leading-snug">
+                    {service.title}
                   </h3>
-                  <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-                    Let's discuss your project requirements and create something amazing together.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button
-                      onClick={handleGetStartedClick}
-                      className="px-8 py-3 bg-white text-gray-900 font-semibold rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                    >
-                      Start a Project
-                    </button>
-                    <button
-                      onClick={() => navigate("/contact")}
-                      className="px-8 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300"
-                    >
-                      Schedule Consultation
-                    </button>
-                  </div>
                 </div>
-              </div>
-            </div>
-          </motion.div>
 
-          {/* Process Section */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mt-24"
-          >
-            <h3 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-              My Working Process
-            </h3>
-            
-            <div className="grid md:grid-cols-4 gap-8">
-              {[
-                { 
-                  step: "01", 
-                  title: "Discovery", 
-                  description: "Understand your requirements and goals" 
-                },
-                { 
-                  step: "02", 
-                  title: "Planning", 
-                  description: "Create roadmap and design architecture" 
-                },
-                { 
-                  step: "03", 
-                  title: "Development", 
-                  description: "Build with modern technologies and best practices" 
-                },
-                { 
-                  step: "04", 
-                  title: "Delivery", 
-                  description: "Launch, support, and maintenance" 
-                },
-              ].map((process, index) => (
-                <motion.div
-                  key={process.step}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center"
-                >
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-teal-500 to-amber-500 flex items-center justify-center text-white font-bold text-xl">
-                    {process.step}
+                {/* Features */}
+                <div className="space-y-2.5 mb-7">
+                  {(service.features ? service.features.split("<br>") : [])
+                    .filter((f) => f.trim())
+                    .slice(0, 5)
+                    .map((feature, i) => (
+                      <div key={i} className="flex items-start gap-2.5">
+                        <CheckCircle className="w-4 h-4 text-accent mt-0.5 shrink-0" />
+                        <span className="text-sm text-muted leading-relaxed">
+                          {feature.trim()}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+
+                {/* Price + CTA */}
+                <div className="mt-auto pt-5 border-t border-ink/[0.06]">
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="text-2xl font-bold text-ink tabular-nums">
+                      {service.price || "Custom"}
+                    </span>
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
-                    {process.title}
-                  </h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    {process.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+                  <button
+                    onClick={() => navigate("/contact")}
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 bg-accent text-accent-ink text-sm font-bold rounded-xl hover:opacity-90 transition-opacity"
+                  >
+                    Get Started
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* ── Process ── */}
+        <motion.section
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-24"
+        >
+          <SectionLabel>How I work</SectionLabel>
+          <h2 className="text-3xl md:text-4xl font-bold text-ink tracking-tight mb-12">
+            My working process
+          </h2>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {process.map((p, index) => (
+              <motion.div
+                key={p.step}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.08 }}
+                viewport={{ once: true }}
+                className="relative rounded-2xl bg-card border border-ink/[0.07] p-6 hover:border-accent/30 transition-colors"
+              >
+                <span className="font-mono text-xs tracking-[0.2em] text-accent opacity-70">
+                  {p.step}
+                </span>
+                <h4 className="text-lg font-bold text-ink mt-3 mb-2">{p.title}</h4>
+                <p className="text-sm text-muted leading-relaxed">{p.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* ── CTA ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-24 rounded-3xl bg-soft border border-ink/[0.07] p-10 md:p-14 text-center"
+        >
+          <p className="text-xs font-semibold tracking-[0.25em] text-accent uppercase mb-4">
+            Ready to start?
+          </p>
+          <h3 className="text-2xl md:text-4xl font-bold text-ink tracking-tight mb-3">
+            Let's transform your ideas
+          </h3>
+          <p className="text-muted mb-8 max-w-md mx-auto">
+            Tell me about your project requirements and let's create something amazing together.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-accent text-accent-ink text-sm font-bold rounded-xl hover:opacity-90 transition-opacity"
+            >
+              Start a project <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/projects"
+              className="inline-flex items-center justify-center px-7 py-3.5 border border-ink/10 hover:border-accent/50 text-muted hover:text-ink text-sm font-semibold rounded-xl transition-colors"
+            >
+              See my work
+            </Link>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };

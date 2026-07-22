@@ -1,5 +1,13 @@
 {
   "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://web-production-4fc8.up.railway.app/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "https://web-production-4fc8.up.railway.app/robots.txt"
+    },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
